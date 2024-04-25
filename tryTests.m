@@ -1,0 +1,78 @@
+clear;
+clc;
+
+%t tests for TRY
+numSamples=60;
+load('tryCompareRestCue.mat',"tryBatch");
+restMeanTime=tryBatch{1};
+restStdTime=tryBatch{2};
+cueMeanTime=tryBatch{3};
+cueStdTime=tryBatch{4};
+%% round 1 tests
+% tests: Rest vs Cue
+% rest1 vs rest2
+% cue1 vs cue2
+[subs,sessions]=size(cueMeanTime);
+%test1: all rest vs all cue
+rest=restMeanTime(:);
+restsig=restStdTime(:);
+cue=cueMeanTime(:);
+cuesig=cueStdTime(:);
+
+[h1,p1]=ttest2(cue,rest);
+%test2: rest1 vs rest2
+[h2,p2]=ttest2(restMeanTime(:,1),restMeanTime(:,2));
+%test3: cue1 vs cue2
+[h3,p3]=ttest2(cueMeanTime(:,1),cueMeanTime(:,2));
+
+testR2C1=[];
+testR1C2=[];
+
+testR1C1=[];
+testR2C2=[];
+
+%% round 2 tests
+%samples = mu + sigma.*randn(numSamples, 1);
+ki=1;
+for ki=1:subs
+% initialize means
+sess1c=cueMeanTime(ki,1);
+sess1r=restMeanTime(ki,1);
+
+sess2c=cueMeanTime(ki,2);
+sess2r=restMeanTime(ki,2);
+% stdevs
+sig1c=cueStdTime(ki,1);
+sig1r=restStdTime(ki,1);
+
+sig2c=cueStdTime(ki,2);
+sig2r=restStdTime(ki,2);
+
+% generate
+s1c = sess1c + sig1c.*randn(numSamples, 1);
+s1r = sess1r + sig1r.*randn(numSamples, 1);
+
+s2c = sess2c + sig2c.*randn(numSamples, 1);
+s2r = sess2r + sig2r.*randn(numSamples, 1);
+
+% ttests 2
+[h21,p21]=ttest2(s1c,s2r);
+[h22,p22]=ttest2(s1c,s1r);
+[h23,p23]=ttest2(s2c,s2r);
+[h24,p24]=ttest2(s2c,s1r);
+
+testR2C1=[testR2C1; p21];
+testR1C2=[testR1C2; p24];
+
+testR1C1=[testR1C1; p22];
+testR2C2=[testR1C2; p23];
+
+end
+tryBatch{5}=testR2C1;
+tryBatch{6}=testR1C2;
+tryBatch{7}=testR1C1;
+tryBatch{8}=testR2C2;
+save('tryCompareRestCue.mat',"tryBatch");
+
+
+
