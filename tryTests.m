@@ -31,9 +31,18 @@ testR1C2=[];
 testR1C1=[];
 testR2C2=[];
 
+resid1=[];
+resid2=[];
+
+presid=[];
+
+
 %% round 2 tests
 %samples = mu + sigma.*randn(numSamples, 1);
 ki=1;
+
+X=linspace(1,numSamples,numSamples);
+n=1; %order of model
 for ki=1:subs
 % initialize means
 sess1c=cueMeanTime(ki,1);
@@ -67,11 +76,38 @@ testR1C2=[testR1C2; p24];
 testR1C1=[testR1C1; p22];
 testR2C2=[testR1C2; p23];
 
+%% residuals
+% regress baseline out of cue
+% lmfit each
+% remove rest from cue
+% plot sess 1 vs sess 2
+% residual = data – fit
+
+
+ps1c = polyfit(X,s1c,n);
+ps1r = polyfit(X,s1r,n);
+ps2c = polyfit(X,s2c,n);
+ps2r = polyfit(X,s2r,n);
+% apply fitted poly
+zs1c = polyval(ps1c,X);
+zs1r = polyval(ps1r,X);
+zs2c = polyval(ps2c,X);
+zs2r = polyval(ps2r,X);
+
+session1=zs1r-zs1c;
+session2=zs2r-zs2c;
+resid1(ki,:)=session1;
+resid2(ki,:)=session2;
+[hres,pres]=ttest2(session1,session2);
+presid(ki)=pres;
+
+
 end
 tryBatch{5}=testR2C1;
 tryBatch{6}=testR1C2;
 tryBatch{7}=testR1C1;
 tryBatch{8}=testR2C2;
+tryBatch{9}=presid;
 save('tryCompareRestCue.mat',"tryBatch");
 
 

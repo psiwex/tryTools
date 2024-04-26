@@ -25,9 +25,25 @@ cuesig=cueStdTime(:);
 %test3: cue1 vs cue2
 [h3,p3]=ttest2(cueMeanTime(:,1),cueMeanTime(:,2));
 
+testR2C1=[];
+testR1C2=[];
+
+testR1C1=[];
+testR2C2=[];
+
+resid1=[];
+resid2=[];
+
+presid=[];
+
+
 %% round 2 tests
 %samples = mu + sigma.*randn(numSamples, 1);
 ki=1;
+
+X=linspace(1,numSamples,numSamples);
+n=1; %order of model
+for ki=1:subs
 % initialize means
 sess1c=cueMeanTime(ki,1);
 sess1r=restMeanTime(ki,1);
@@ -48,4 +64,49 @@ s1r = sess1r + sig1r.*randn(numSamples, 1);
 s2c = sess2c + sig2c.*randn(numSamples, 1);
 s2r = sess2r + sig2r.*randn(numSamples, 1);
 
-% 
+% ttests 2
+[h21,p21]=ttest2(s1c,s2r);
+[h22,p22]=ttest2(s1c,s1r);
+[h23,p23]=ttest2(s2c,s2r);
+[h24,p24]=ttest2(s2c,s1r);
+
+testR2C1=[testR2C1; p21];
+testR1C2=[testR1C2; p24];
+
+testR1C1=[testR1C1; p22];
+testR2C2=[testR1C2; p23];
+
+ps1c = polyfit(X,s1c,n);
+ps1r = polyfit(X,s1r,n);
+ps2c = polyfit(X,s2c,n);
+ps2r = polyfit(X,s2r,n);
+% apply fitted poly
+zs1c = polyval(ps1c,X);
+zs1r = polyval(ps1r,X);
+zs2c = polyval(ps2c,X);
+zs2r = polyval(ps2r,X);
+
+session1=zs1r-zs1c;
+session2=zs2r-zs2c;
+resid1(ki,:)=session1;
+resid2(ki,:)=session2;
+[hres,pres]=ttest2(session1,session2);
+presid(ki)=pres;
+
+
+end
+tryBatch{5}=testR2C1;
+tryBatch{6}=testR1C2;
+tryBatch{7}=testR1C1;
+tryBatch{8}=testR2C2;
+tryBatch{8}=testR2C2;
+%save('tryCompareRestCue.mat',"tryBatch");
+
+%% residuals
+% regress baseline out of cue
+% lmfit each
+% remove rest from cue
+% plot sess 1 vs sess 2
+% residual = data – fit
+
+
