@@ -3,7 +3,7 @@
 mainWindow=30;
 esuf1='a_rest.bdf';
 esuf2='b_rest.bdf';
-
+eegChan=13;
 
 fsuf1='a_CUE.bdf';
 fsuf2='b_CUE.bdf';
@@ -13,9 +13,19 @@ suf2='b-Cue Reactivity EEG.log';
 
 hrValues=[];
 bpmValues=[];
+apValues=[];
+apstdValues=[];
 
 hrValues1=[];
 bpmValues1=[];
+apValues1=[];
+apstdValues1=[];
+
+hrvValues=[];
+hrvValues1=[];
+
+hrvstdValues=[];
+hrvstdValues1=[];
 
 %https://www.mathworks.com/matlabcentral/fileexchange/73049-calculate-heart-rate-from-electrocardiogram-data
 %https://github.com/VisLab/EEG-Beats
@@ -62,12 +72,12 @@ timeOutputs2 = getTryTimestampsMeasures(fName2);
 EEG = pop_biosig(efName1);
 [EEG,params] = tryPreproc(EEG);
 [ekgPeaks, params] = eeg_beats(EEG, params);
-[bpm1, hr1, meanRR1, stdRR1] = calcBpm(EEG,ekgPeaks);
+[bpm1, hr1, meanRR1, stdRR1, alphaPower1, alphaStd1,hrv1,hrvStd1] = calcBpm(EEG,ekgPeaks,eegChan);
 
 EEG = pop_biosig(efName2);
 [EEG,params] = tryPreproc(EEG);
 [ekgPeaks, params] = eeg_beats(EEG, params);
-[bpm2, hr2, meanRR2, stdRR2] = calcBpm(EEG,ekgPeaks);
+[bpm2, hr2, meanRR2, stdRR2, alphaPower2, alphaStd2,hrv2,hrvStd2] = calcBpm(EEG,ekgPeaks,eegChan);
 
 hr=[meanRR1 meanRR2];
 hrValues(ki,:)=hr;
@@ -75,22 +85,48 @@ hrValues(ki,:)=hr;
 bpm=[stdRR1 stdRR2];
 bpmValues(ki,:)=bpm;
 
+ap=[alphaPower1 alphaPower2];
+apValues(ki,:)=ap;
+
+apstd=[alphaStd1 alphaStd2];
+apstdValues(ki,:)=apstd;
+
+
 %CUE
 EEG = pop_biosig(ffName1);
 [EEG,params] = tryPreproc(EEG);
 [ekgPeaks, params] = eeg_beats(EEG, params);
-[bpm11, hr11, meanRR11, stdRR11] = calcBpm(EEG,ekgPeaks);
+[bpm11, hr11, meanRR11, stdRR11, alphaPower11, alphaStd11,hrv11,hrvStd11] = calcBpm(EEG,ekgPeaks,eegChan);
 
 EEG = pop_biosig(ffName2);
 [EEG,params] = tryPreproc(EEG);
 [ekgPeaks, params] = eeg_beats(EEG, params);
-[bpm12, hr12, meanRR12, stdRR12] = calcBpm(EEG,ekgPeaks);
+[bpm12, hr12, meanRR12, stdRR12, alphaPower12, alphaStd12,hrv12,hrvStd12] = calcBpm(EEG,ekgPeaks,eegChan);
 
 hr=[meanRR11 meanRR12];
 hrValues1(ki,:)=hr;
 
 bpm=[stdRR11 stdRR12];
 bpmValues1(ki,:)=bpm;
+
+ap=[alphaPower11 alphaPower12];
+apValues1(ki,:)=ap;
+
+apstd=[alphaStd1 alphaStd2];
+apstdValues1(ki,:)=apstd;
+
+hrv=[hrv1 hrv2];
+hrvValues(ki,:)=hrv;
+
+hrvstd=[hrvStd1 hrvStd2];
+hrvstdValues(ki,:)=hrvstd;
+
+hrv=[hrv11 hrv12];
+hrvValues1(ki,:)=hrv;
+
+hrvstd=[hrvStd11 hrvStd12];
+hrvstdValues1(ki,:)=hrvstd;
+
 
 catch
 
@@ -100,11 +136,32 @@ hrValues(ki,:)=hr;
 bpm=[0 0];
 bpmValues(ki,:)=bpm;
 
+ap=[0 0];
+apValues(ki,:)=ap;
+
+apstd=[0 0];
+apstdValues(ki,:)=apstd;
+
+
 hr=[0 0];
 hrValues1(ki,:)=hr;
 
 bpm=[0 0];
 bpmValues1(ki,:)=bpm;
+
+ap=[0 0];
+apValues1(ki,:)=ap;
+
+apstd=[0 0];
+apstdValues1(ki,:)=apstd;
+
+
+hrv=[0 0];
+hrvValues1(ki,:)=ap;
+
+hrvstd=[0 0];
+hrvstdValues1(ki,:)=apstd;
+
 end
 end
 tryBatch={};
@@ -115,10 +172,28 @@ restStdTime=bpmValues;
 cueMeanTime=hrValues1;
 cueStdTime=bpmValues1;
 
+restHrvMeanTime=hrvValues;
+restHrvStdTime=hrvstdValues;
+
+cueHrvTime=hrvValues1;
+cueHrvStdTime=hrvstdValues1;
+
+
 tryBatch{1}=restMeanTime;
 tryBatch{2}=restStdTime;
 tryBatch{3}=cueMeanTime;
 tryBatch{4}=cueStdTime;
+
+tryBatch{11}=apValues;
+tryBatch{12}=apstdValues;
+tryBatch{13}=apValues1;
+tryBatch{14}=apstdValues1;
+
+tryBatch{31}=restHrvMeanTime;
+tryBatch{32}=restHrvStdTime;
+tryBatch{33}=cueHrvTime;
+tryBatch{34}=cueHrvStdTime;
+
 save('tryCompareRestCue.mat',"tryBatch");
 
 %[h1,p1]=ttest2(bpmValues(:,1),bpmValues(:,2));
