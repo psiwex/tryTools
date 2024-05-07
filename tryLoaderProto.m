@@ -144,7 +144,11 @@ apstdValues(ki,:)=apstd;
 
 
 hr=[0 0];
-hrValues1(ki,:)=hr;
+hrvValues(ki,:)=hr;
+
+hrvstd=[0 0];
+hrvstdValues(ki,:)=hrvstd;
+
 
 bpm=[0 0];
 bpmValues1(ki,:)=bpm;
@@ -157,10 +161,21 @@ apstdValues1(ki,:)=apstd;
 
 
 hrv=[0 0];
-hrvValues1(ki,:)=ap;
+hrvValues1(ki,:)=hrv;
 
 hrvstd=[0 0];
-hrvstdValues1(ki,:)=apstd;
+hrvstdValues1(ki,:)=hrvstd;
+
+
+
+hrv=[0 0];
+hrvValues1(ki,:)=hrv;
+
+hrvstd=[0 0];
+hrvstdValues1(ki,:)=hrvstd;
+
+
+
 
 end
 end

@@ -4,9 +4,9 @@ clc;
 %t tests for TRY
 numSamples=60;
 load('tryCompareRestCue.mat',"tryBatch");
-restMeanTime=tryBatch{1};
-restStdTime=tryBatch{2};
-cueMeanTime=tryBatch{3};
+restMeanTime=(tryBatch{1});
+restStdTime=(tryBatch{2});
+cueMeanTime=(tryBatch{3});
 cueStdTime=tryBatch{4};
 
 apValues=tryBatch{11};
@@ -105,6 +105,19 @@ hrvresid2=[];
 
 hrvpresid=[];
 
+[synSubs,~]=size(restMeanTime);
+
+h1Mean=mean(cleanUp(cueMeanTime(:,1)));
+h2Mean=mean(cleanUp(cueMeanTime(:,2)));
+
+h1Std=std(cleanUp(cueMeanTime(:,1)));
+h2Std=std(cleanUp(cueMeanTime(:,2)));
+
+newCueMean1= h1Mean + h1Std.*randn(synSubs, 1);
+newCueMean2= h2Mean + h2Std.*randn(synSubs, 1);
+newCue=[newCueMean1 newCueMean2];
+cueMeanTime=newCue;
+tryBatch{3}=cueMeanTime;
 
 %% round 2 tests
 %samples = mu + sigma.*randn(numSamples, 1);
@@ -174,6 +187,8 @@ hrvs1r = hrvsess1r + hrvsig1r.*randn(numSamples, 1);
 
 hrvs2c = hrvsess2c + hrvsig2c.*randn(numSamples, 1);
 hrvs2r = hrvsess2r + hrvsig2r.*randn(numSamples, 1);
+
+
 
 
 % ttests 2

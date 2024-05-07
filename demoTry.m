@@ -79,16 +79,30 @@ cueHrvStdTime=tryBatch{34};
 hrv=[cueHrvTime(:,1); cueHrvTime(:,2)];
 
 % run anova
-p1 = anovan(hr,{ms ma mg me},'model','interaction','varnames',{'Gender','Age','Group','Session'})
+% p1 = anovan(hr,{ms ma mg me},'model','interaction','varnames',{'Gender','Age','Group','Session'})
+% p2 = anovan(ap,{ms ma mg me},'model','interaction','varnames',{'Gender','Age','Group','Session'})
+% p3 = anovan(hrv,{ms ma mg me},'model','interaction','varnames',{'Gender','Age','Group','Session'})
+
+ms=cleanUp(ms);
+ma=cleanUp(ma);
+mg=cleanUp(mg);
+me=cleanUp(me);
+
+hr=cleanUp(hr);
+ap=cleanUp(ap);
+hrv=cleanUp(hrv);
+hrv(length(hrv)+1)=hrv(end);
+
+% pa1 = anovan(hr,{ms ma mg me},'model','interaction','varnames',{'Gender','Age','Group','Session'})
+% pa2 = anovan(ap,{ms ma mg me},'model','interaction','varnames',{'Gender','Age','Group','Session'})
+% pa3 = anovan(hrv,{ms ma mg me},'model','interaction','varnames',{'Gender','Age','Group','Session'})
+
+pb1 = anovan(hr,{ms ma mg},'model','interaction','varnames',{'Gender','Age','Group'})
+pb2 = anovan(ap,{ms ma mg},'model','interaction','varnames',{'Gender','Age','Group'})
+pb3 = anovan(hrv,{ms ma mg},'model','interaction','varnames',{'Gender','Age','Group'})
 
 
-p2 = anovan(ap,{ms ma mg me},'model','interaction','varnames',{'Gender','Age','Group','Session'})
 
-
-p3 = anovan(hrv,{ms ma mg me},'model','interaction','varnames',{'Gender','Age','Group','Session'})
-
-
-
-p4 = anovan(hrv,{ms ma mg me hr ap},'model','interaction','varnames',{'Gender','Age','Group','Session','Heart Rate','Alpha EEG'})
-
+%p4 = anovan(hrv,{ms ma mg me hr},'model','interaction','varnames',{'Gender','Age','Group','Session','Heart Rate'})
+%p5 = anovan(hrv,{ms ma mg me ap},'model','interaction','varnames',{'Gender','Age','Group','Session','Alpha Power'})
 
