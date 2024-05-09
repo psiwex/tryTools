@@ -1,4 +1,4 @@
-
+%https://www.mathworks.com/help/stats/repeatedmeasuresmodel.ranova.html
 homeDir='C:\Users\John\Documents\MATLAB\tryEeg\CUE_REST\';
 channelLocationFile = 'C:\Users\John\Documents\MATLAB\eeglab2021.1\plugins\dipfit\standard_BESA\standard-10-5-cap385.elp';
 
@@ -79,30 +79,45 @@ cueHrvStdTime=tryBatch{34};
 hrv=[cueHrvTime(:,1); cueHrvTime(:,2)];
 
 % run anova
-% p1 = anovan(hr,{ms ma mg me},'model','interaction','varnames',{'Gender','Age','Group','Session'})
-% p2 = anovan(ap,{ms ma mg me},'model','interaction','varnames',{'Gender','Age','Group','Session'})
-% p3 = anovan(hrv,{ms ma mg me},'model','interaction','varnames',{'Gender','Age','Group','Session'})
+% p1 = anovan((hr),{ms ma mg me},'model','interaction','varnames',{'Gender','Age','Group','Session'})
+% p2 = anovan((ap),{ms ma mg me},'model','interaction','varnames',{'Gender','Age','Group','Session'})
+% p3 = anovan((hrv),{ms ma mg me},'model','interaction','varnames',{'Gender','Age','Group','Session'})
+% 
+% ms=cleanUp(ms);
+% ma=cleanUp(ma);
+% mg=cleanUp(mg);
+% me=cleanUp(me);
 
-ms=cleanUp(ms);
-ma=cleanUp(ma);
-mg=cleanUp(mg);
-me=cleanUp(me);
-
-hr=cleanUp(hr);
-ap=cleanUp(ap);
-hrv=cleanUp(hrv);
-hrv(length(hrv)+1)=hrv(end);
+% hr=cleanUp(hr);
+% ap=cleanUp(ap);
+% hrv=cleanUp(hrv);
+% hrv(length(hrv)+1)=hrv(end);
 
 % pa1 = anovan(hr,{ms ma mg me},'model','interaction','varnames',{'Gender','Age','Group','Session'})
 % pa2 = anovan(ap,{ms ma mg me},'model','interaction','varnames',{'Gender','Age','Group','Session'})
 % pa3 = anovan(hrv,{ms ma mg me},'model','interaction','varnames',{'Gender','Age','Group','Session'})
 
-pb1 = anovan(hr,{ms ma mg},'model','interaction','varnames',{'Gender','Age','Group'})
-pb2 = anovan(ap,{ms ma mg},'model','interaction','varnames',{'Gender','Age','Group'})
-pb3 = anovan(hrv,{ms ma mg},'model','interaction','varnames',{'Gender','Age','Group'})
-
-
+% pb1 = anovan(hr,{ms ma mg},'model','interaction','varnames',{'Gender','Age','Group'})
+% pb2 = anovan(ap,{ms ma mg},'model','interaction','varnames',{'Gender','Age','Group'})
+% pb3 = anovan(hrv,{ms ma mg},'model','interaction','varnames',{'Gender','Age','Group'})
+% 
+% 
 
 %p4 = anovan(hrv,{ms ma mg me hr},'model','interaction','varnames',{'Gender','Age','Group','Session','Heart Rate'})
 %p5 = anovan(hrv,{ms ma mg me ap},'model','interaction','varnames',{'Gender','Age','Group','Session','Alpha Power'})
+% pb1 = anovan(hr,{ms ma mg},'model','interaction','varnames',{'Gender','Age','Group'})
+% pb2 = anovan(ap,{ms ma mg},'model','interaction','varnames',{'Gender','Age','Group'})
+% pb3 = anovan(hrv,{ms ma mg},'model','interaction','varnames',{'Gender','Age','Group'})
+% 
+
+%p0 = anovan((me),{ms ma mg hr ap hrv},'model','interaction','varnames',{'Gender','Age','Group','Heart Rate','Alpha Power','HRV'})
+%rowz=1:1:length(squeeze(ms(:,1)));
+%tryTable=array2table({squeeze(ms(:,1)), squeeze(ma(:,1)), squeeze(mg(:,1)), squeeze(hr(:,1)), squeeze(ap(:,1)), squeeze(hrv(:,1))},'RowNames',{num2str(squeeze(rowz))},'VariableNames',{'Gender','Age','Group','HR','Alpha','HRV'});
+tryTable=array2table({squeeze(ms(:,1)), squeeze(ma(:,1)), squeeze(mg(:,1)), squeeze(hr(:,1)), squeeze(ap(:,1)), squeeze(hrv(:,1))},'VariableNames',{'Gender','Age','Group','HR','Alpha','HRV'});
+
+
+ttab = table([squeeze(me(:,1))]','VariableNames',{'Session'});
+
+%rm = fitrm(tryTable,'Gender-HRV ~ Session','WithinDesign',ttab);
+
 
