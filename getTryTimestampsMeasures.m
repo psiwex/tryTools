@@ -21,6 +21,10 @@ timeOutputs = struct();
 timeOutputs.types=types1;
 timeOutputs.timestamp=timestamp1;
 timeOutputs.duration=duration1;
-
+timeOutputs.newSrate=256;
+timeOutputs.baselineWindow=.2;
+timeOutputs.endWindow=2;
+totalWindow=timeOutputs.baselineWindow+timeOutputs.endWindow;
+timeOutputs.totalWindow=totalWindow;
 
 end

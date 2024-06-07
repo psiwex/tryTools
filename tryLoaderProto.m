@@ -4,7 +4,7 @@ mainWindow=30;
 esuf1='a_rest.bdf';
 esuf2='b_rest.bdf';
 eegChan=13;
-
+plotChan='Pz';
 fsuf1='a_CUE.bdf';
 fsuf2='b_CUE.bdf';
 
@@ -16,10 +16,16 @@ bpmValues=[];
 apValues=[];
 apstdValues=[];
 
+lppAmpValues=[];
+lppAmpStdValues=[];
+
 hrValues1=[];
 bpmValues1=[];
 apValues1=[];
 apstdValues1=[];
+
+lppAmpValues1=[];
+lppAmpStdValues1=[];
 
 hrvValues=[];
 hrvValues1=[];
@@ -75,6 +81,7 @@ EEG = pop_biosig(efName1);
 [bpm1, hr1, meanRR1, stdRR1, alphaPower1, alphaStd1,hrv1,hrvStd1] = calcBpm(EEG,ekgPeaks,eegChan);
 
 EEG = pop_biosig(efName2);
+%timeOutputs1 = tryEpochIndex(EEG,timeOutputs1);
 [EEG,params] = tryPreproc(EEG);
 [ekgPeaks, params] = eeg_beats(EEG, params);
 [bpm2, hr2, meanRR2, stdRR2, alphaPower2, alphaStd2,hrv2,hrvStd2] = calcBpm(EEG,ekgPeaks,eegChan);
@@ -94,14 +101,32 @@ apstdValues(ki,:)=apstd;
 
 %CUE
 EEG = pop_biosig(ffName1);
+timeOutputs1 = tryEpochIndex(EEG,timeOutputs1);
 [EEG,params] = tryPreproc(EEG);
+EEG = tryEpocher(EEG,timeOutputs1);
 [ekgPeaks, params] = eeg_beats(EEG, params);
+eegChan = chanFinder(EEG,plotChan);
+EEG = lppParameters(EEG,timeOutputs1,eegChan);
 [bpm11, hr11, meanRR11, stdRR11, alphaPower11, alphaStd11,hrv11,hrvStd11] = calcBpm(EEG,ekgPeaks,eegChan);
+ampBad1=EEG.ampBad;
+ampStd1=EEG.ampBadStd;
 
 EEG = pop_biosig(ffName2);
+timeOutputs2 = tryEpochIndex(EEG,timeOutputs2);
 [EEG,params] = tryPreproc(EEG);
+EEG = tryEpocher(EEG,timeOutputs2);
 [ekgPeaks, params] = eeg_beats(EEG, params);
+eegChan = chanFinder(EEG,plotChan);
+EEG = lppParameters(EEG,timeOutputs1,eegChan);
 [bpm12, hr12, meanRR12, stdRR12, alphaPower12, alphaStd12,hrv12,hrvStd12] = calcBpm(EEG,ekgPeaks,eegChan);
+ampBad2=EEG.ampBad;
+ampStd2=EEG.ampBadStd;
+
+lppAmp=[ampBad1 ampBad2];
+lppAmpValues1(ki,:)=lppAmp;
+
+lppStdAmp=[ampStd1 ampStd2];
+lppAmpStdValues1(ki,:)=lppStdAmp;
 
 hr=[meanRR11 meanRR12];
 hrValues1(ki,:)=hr;
@@ -129,6 +154,11 @@ hrvstdValues1(ki,:)=hrvstd;
 
 
 catch
+lppAmp=[0 0];
+lppAmpValues1(ki,:)=lppAmp;
+
+lppStdAmp=[0 0];
+lppAmpStdValues1(ki,:)=lppStdAmp;
 
 hr=[0 0];
 hrValues(ki,:)=hr;
@@ -208,6 +238,10 @@ tryBatch{31}=restHrvMeanTime;
 tryBatch{32}=restHrvStdTime;
 tryBatch{33}=cueHrvTime;
 tryBatch{34}=cueHrvStdTime;
+
+tryBatch{51}=lppAmpValues1;
+tryBatch{52}=lppAmpStdValues1;
+
 
 save('tryCompareRestCue.mat',"tryBatch");
 

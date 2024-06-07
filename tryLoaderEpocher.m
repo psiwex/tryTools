@@ -11,60 +11,11 @@ fsuf2='b_CUE.bdf';
 suf1='a-Cue Reactivity EEG.log';
 suf2='b-Cue Reactivity EEG.log';
 
-hrValues=[];
-bpmValues=[];
-
-%https://www.mathworks.com/matlabcentral/fileexchange/73049-calculate-heart-rate-from-electrocardiogram-data
-%https://github.com/VisLab/EEG-Beats
-homeDir='C:\Users\John\Documents\MATLAB\tryEeg\CUE_REST\';
-channelLocationFile = 'C:\Users\John\Documents\MATLAB\eeglab2021.1\plugins\dipfit\standard_BESA\standard-10-5-cap385.elp';
-
-oldSR=1024;
-
-
-list= dir([homeDir '\TRY*']);
-
-T = struct2table(list);
-subNames=table2cell(T(:,1));
-
-ki=1;
-subNum='TRY001';
-
-%for ki=1:length(subNames)
-subNum=subNames{ki};
-
-%% derive values
-
-f11=strcat(homeDir,subNum);
-f11=strcat(f11,'\');
-f11=strcat(f11,subNum);
-fName1=strcat(f11,suf1);
-fName2=strcat(f11,suf2);
-
-
-efName1=strcat(f11,esuf1);
-efName2=strcat(f11,esuf2);
-
-ffName1=strcat(f11,fsuf1);
-ffName2=strcat(f11,fsuf2);
-%% loading tables
-
-% 
-T2 = readtable(fName1);
-% types2=table2cell(T2(:,4));
-% timestamp2=table2cell(T2(:,5));
-% duration2=table2cell(T2(:,8));
 
 %% preproc
 timeOutputs = getTryTimestampsMeasures(fName1);
 
-EEG = pop_biosig(ffName1);
-[EEG,params] = tryPreproc(EEG);
-[ekgPeaks, params] = eeg_beats(EEG, params);
-[bpm,hr] = calcBpm(EEG,ekgPeaks);
 
-dur=[];
-tur=[];
 duration=timeOutputs.duration;
 timestamp=timeOutputs.timestamp;
 labels=timeOutputs.types;

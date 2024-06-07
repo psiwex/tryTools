@@ -19,7 +19,8 @@ restHrvStdTime=tryBatch{32};
 cueHrvTime=tryBatch{33};
 cueHrvStdTime=tryBatch{34};
 
-
+lppAmpValues1=tryBatch{51};
+lppAmpStdValues1=tryBatch{52};
 %% round 1 tests
 % tests: Rest vs Cue
 % rest1 vs rest2
@@ -43,6 +44,7 @@ cuesig=cueStdTime(:);
 [h91,p91]=ttest2(restMeanTime(:,1),apValues1(:,1));
 [h92,p92]=ttest2(restMeanTime(:,2),apValues1(:,2));
 
+[hlpp,plpp]=ttest2(lppAmpValues1(:,1),lppAmpValues1(:,2));
 
 % test 5: hrv
 [h01,p01]=ttest2(restHrvMeanTime(:),cueHrvTime(:));
@@ -107,17 +109,29 @@ hrvpresid=[];
 
 [synSubs,~]=size(restMeanTime);
 
+
+lpp1Mean=mean(cleanUp(lppAmpValues1(:,1)));
+lpp2Mean=mean(cleanUp(lppAmpValues1(:,2)));
+lpp1Std=std(cleanUp(lppAmpStdValues1(:,1)));
+lpp2Std=std(cleanUp(lppAmpStdValues1(:,2)));
+
+
 h1Mean=mean(cleanUp(cueMeanTime(:,1)));
 h2Mean=mean(cleanUp(cueMeanTime(:,2)));
 
 h1Std=std(cleanUp(cueMeanTime(:,1)));
 h2Std=std(cleanUp(cueMeanTime(:,2)));
 
-newCueMean1= h1Mean + h1Std.*randn(synSubs, 1);
-newCueMean2= h2Mean + h2Std.*randn(synSubs, 1);
-newCue=[newCueMean1 newCueMean2];
-cueMeanTime=newCue;
-tryBatch{3}=cueMeanTime;
+newLppMean1= lpp1Mean + lpp1Std.*randn(synSubs, 1);
+newLppMean2= lpp2Mean + lpp2Std.*randn(synSubs, 1);
+
+
+newLpp=[newLppMean1 newLppMean2];
+tryBatch{50}=cueMeanTime;
+[hlppN,plppN]=ttest2(newLppMean1,newLppMean2);
+%newCue=[newCueMean1 newCueMean2];
+%cueMeanTime=newCue;
+%tryBatch{3}=cueMeanTime;
 
 %% round 2 tests
 %samples = mu + sigma.*randn(numSamples, 1);
