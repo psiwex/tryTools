@@ -1,0 +1,35 @@
+load('lppNeuCells.mat','lppNeuCells');
+%load('lppAlcCells.mat','lppAlcCells');
+%load('lppFodCells.mat','lppFodCells');
+
+EEG.srate=256;
+chanLim=44;
+timeBnds=[-.2 2];
+
+
+subSel=1;
+
+mki=99;
+trueLeng=mki-1;
+
+data=lppNeuCells{subSel};
+EEG.data=data;
+[nbchan,pnts,trials]=size(data);
+EEG.nbchan=nbchan;
+EEG.trials=trials;
+EEG.pnts=pnts;
+EEG.epoch=timeBnds;  
+EEG.xmin=min(min(data));
+EEG.xmax=max(max(data));
+EEG.reject=[];
+EEG = pop_gratton(EEG, 35, 'chans', 1:EEG.nbchan);		% Correct blinks using channel 35 = VEOG
+EEG = pop_gratton(EEG, 36, 'chans', 1:EEG.nbchan);
+
+datMean=mean(EEG.data,3);
+datStd=std(datMean');
+art
+
+%     EEG  = pop_artmwppth( EEG , 'Channel',  1:EEG.nbchan, 'Flag', [ 1 2], 'Threshold',  100, 'Twindow', [ -190 1800], 'Windowsize',  150, 'Windowstep',  75 );
+%     EEG  = pop_artflatline( EEG , 'Channel',  1:EEG.nbchan, 'Duration',  500, 'Flag', [ 1 3], 'Threshold', [ -0.5 0.5], 'Twindow', [ -199.2 996.1] );
+%     EEG  = pop_artdiff( EEG , 'Channel',  1:EEG.nbchan, 'Flag', [ 1 4], 'Threshold',  50, 'Twindow', [ -199.2 996.1] );
+% 

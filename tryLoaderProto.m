@@ -10,6 +10,9 @@ fsuf2='b_CUE.bdf';
 
 suf1='a-Cue Reactivity EEG.log';
 suf2='b-Cue Reactivity EEG.log';
+lppNeuCells={};
+lppAlcCells={};
+lppFodCells={};
 
 hrValues=[];
 bpmValues=[];
@@ -48,7 +51,7 @@ subNames=table2cell(T(:,1));
 
 ki=1;
 subNum='TRY001';
-
+mki=1;
 for ki=1:length(subNames)
 subNum=subNames{ki};
 
@@ -152,6 +155,15 @@ hrvValues1(ki,:)=hrv;
 hrvstd=[hrvStd11 hrvStd12];
 hrvstdValues1(ki,:)=hrvstd;
 
+neuCase=EEG.neuEpochs;
+alcCase=EEG.alcEpochs;
+fodCase=EEG.fodEpochs;
+
+lppNeuCells{mki}=neuCase;
+lppAlcCells{mki}=alcCase;
+lppFodCells{mki}=fodCase;
+
+mki=mki+1;
 
 catch
 lppAmp=[0 0];
@@ -243,8 +255,11 @@ tryBatch{51}=lppAmpValues1;
 tryBatch{52}=lppAmpStdValues1;
 
 
-save('tryCompareRestCue.mat',"tryBatch");
+%save('tryCompareRestCue.mat',"tryBatch");
 
 %[h1,p1]=ttest2(bpmValues(:,1),bpmValues(:,2));
 %[h2,p2]=ttest2(hrValues(:,1),hrValues(:,2));
 
+save('lppNeuCells.mat','lppNeuCells');
+save('lppAlcCells.mat','lppAlcCells');
+save('lppFodCells.mat','lppFodCells');
