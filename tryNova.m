@@ -66,9 +66,39 @@ cueStdTime=tryBatch{4};
 lpp=tryBatch{50};
 lppOld=tryBatch{51};
 
+lppAmpValues1=tryBatch{51};
+lppAmpStdValues1=tryBatch{52};
+
+%% more lpp
+lppAmpNeuValues=tryBatch{40};
+lppAmpNeuStdValues=tryBatch{41};
+
+lppAmpAlcValues=tryBatch{42};
+lppAmpAlcStdValues=tryBatch{43};
+
+lppAmpFodValues=tryBatch{44};
+lppAmpFodStdValues=tryBatch{45};
+
+lppAmpFixValues=tryBatch{46};
+lppAmpFixStdValues=tryBatch{47};
+
+lppNeuMean=mean(cleanUp(lppAmpNeuValues(:,1)));
+lppAlcMean=mean(cleanUp(lppAmpAlcValues(:,1)));
+lppFodMean=mean(cleanUp(lppAmpFodValues(:,1)));
+lppFixMean=mean(cleanUp(lppAmpFixValues(:,1)));
+
+lppNeuStd=std(cleanUp(lppAmpNeuValues(:,1)));
+lppAlcStd=std(cleanUp(lppAmpAlcValues(:,1)));
+lppFodStd=std(cleanUp(lppAmpFodValues(:,1)));
+lppFixStd=std(cleanUp(lppAmpFixValues(:,1)));
+
+lppAlcContrast=[cleanUp(lppAmpAlcValues(:,1))-lppNeuMean; cleanUp(lppAmpAlcValues(:,2))-lppNeuMean]; 
+lppFodContrast=[cleanUp(lppAmpFodValues(:,1))-lppNeuMean; cleanUp(lppAmpFodValues(:,2))-lppNeuMean]; 
+lppFixContrast=[cleanUp(lppAmpFixValues(:,1))-lppNeuMean; cleanUp(lppAmpFixValues(:,2))-lppNeuMean];
+
 hr=[cueMeanTime(:,1); cueMeanTime(:,2)];
-hr=[restMeanTime(:,1); cueMeanTime(:,1)];
-lpp=[lpp(:,1); lpp(:,2)];
+%hr=[restMeanTime(:,1); cueMeanTime(:,1)];
+%lpp=[lpp(:,1); lpp(:,2)];
 lpp=[lppOld(:,1); lppOld(:,2)];
 
 apValues=tryBatch{11};
@@ -277,17 +307,17 @@ ca1=mean(c121);
 cda=ca1-ca0;
 
 
-[p,t,stats,~] = anovan((lpp),{ms mg c01},'model','interaction','varnames',{'Gender','Group','Scale01'})
-[p,t,stats,~] = anovan((lpp),{ms mg c02},'model','interaction','varnames',{'Gender','Group','Scale02'})
-[p,t,stats,~] = anovan((lpp),{ms mg c04},'model','interaction','varnames',{'Gender','Group','Scale04'})
-[p,t,stats,~] = anovan((lpp),{ms mg c05},'model','interaction','varnames',{'Gender','Group','Scale05'})
-[p,t,stats,~] = anovan((lpp),{ms mg c06},'model','interaction','varnames',{'Gender','Group','Scale06'})
-[p,t,stats,~] = anovan((lpp),{ms mg c07},'model','interaction','varnames',{'Gender','Group','Scale07'})
-[p,t,stats,~] = anovan((lpp),{ms mg c08},'model','interaction','varnames',{'Gender','Group','Scale08'})
-[p,t,stats,~] = anovan((lpp),{ms mg c09},'model','interaction','varnames',{'Gender','Group','Scale09'})
-[p,t,stats,~] = anovan((lpp),{ms mg c10},'model','interaction','varnames',{'Gender','Group','Scale10'})
-[p,t,stats,~] = anovan((lpp),{ms mg c11},'model','interaction','varnames',{'Gender','Group','Scale11'})
-[p,t,stats,~] = anovan((lpp),{ms mg c12},'model','interaction','varnames',{'Gender','Group','Scale12'})
+% [p,t,stats,~] = anovan((lpp),{ms mg c01},'model','interaction','varnames',{'Gender','Group','Scale01'})
+% [p,t,stats,~] = anovan((lpp),{ms mg c02},'model','interaction','varnames',{'Gender','Group','Scale02'})
+% [p,t,stats,~] = anovan((lpp),{ms mg c04},'model','interaction','varnames',{'Gender','Group','Scale04'})
+% [p,t,stats,~] = anovan((lpp),{ms mg c05},'model','interaction','varnames',{'Gender','Group','Scale05'})
+% [p,t,stats,~] = anovan((lpp),{ms mg c06},'model','interaction','varnames',{'Gender','Group','Scale06'})
+% [p,t,stats,~] = anovan((lpp),{ms mg c07},'model','interaction','varnames',{'Gender','Group','Scale07'})
+% [p,t,stats,~] = anovan((lpp),{ms mg c08},'model','interaction','varnames',{'Gender','Group','Scale08'})
+% [p,t,stats,~] = anovan((lpp),{ms mg c09},'model','interaction','varnames',{'Gender','Group','Scale09'})
+% [p,t,stats,~] = anovan((lpp),{ms mg c10},'model','interaction','varnames',{'Gender','Group','Scale10'})
+% [p,t,stats,~] = anovan((lpp),{ms mg c11},'model','interaction','varnames',{'Gender','Group','Scale11'})
+% [p,t,stats,~] = anovan((lpp),{ms mg c12},'model','interaction','varnames',{'Gender','Group','Scale12'})
 
 [ra,pa]=corrcoef(cd12,lpp);
 [rb,pb]=corrcoef(mg,lpp);
@@ -312,3 +342,32 @@ cda=ca1-ca0;
 [rg,pg]=corrcoef([cleanUp(hr); hr(1)],cleanUp(cd12));
 [rh,ph]=corrcoef(cleanUp(ap),cleanUp(cd12));
 [ri,pi]=corrcoef([cleanUp(hrv); hrv(1)],cleanUp(cd12));
+[rj,pj]=corrcoef(cleanUp(lpp),cleanUp(cd12));
+
+halfWay=round(.5*length(lppFodContrast));
+lppFod=lppFodContrast(1:halfWay);
+lppAlc=lppAlcContrast(1:halfWay);
+lppFix=lppFixContrast(1:halfWay);
+
+[p,t,stats,~] = anovan((lpp),{ms mg c07},'model','interaction','varnames',{'Gender','Group','Scale07'})
+[p,t,stats,~] = anovan((lpp),{ms mg c12},'model','interaction','varnames',{'Gender','Group','Scale12'})
+[p,t,stats,~] = anovan((lpp),{ms mg c07 c12},'model','interaction','varnames',{'Gender','Group','Scale07','Scale12'})
+
+
+% alc
+
+[p,t,stats,~] = anovan((lppAlc),{ms mg c07},'model','interaction','varnames',{'Gender','Group','Scale07'})
+[p,t,stats,~] = anovan((lppAlc),{ms mg c12},'model','interaction','varnames',{'Gender','Group','Scale12'})
+[p,t,stats,~] = anovan((lppAlc),{ms mg c07 c12},'model','interaction','varnames',{'Gender','Group','Scale07','Scale12'})
+
+
+% fod
+[p,t,stats,~] = anovan((lppFod),{ms mg c07},'model','interaction','varnames',{'Gender','Group','Scale07'})
+[p,t,stats,~] = anovan((lppFod),{ms mg c12},'model','interaction','varnames',{'Gender','Group','Scale12'})
+[p,t,stats,~] = anovan((lppFod),{ms mg c07 c12},'model','interaction','varnames',{'Gender','Group','Scale07','Scale12'})
+
+
+% fix
+[p,t,stats,~] = anovan((lppFix),{ms mg c07},'model','interaction','varnames',{'Gender','Group','Scale07'})
+[p,t,stats,~] = anovan((lppFix),{ms mg c12},'model','interaction','varnames',{'Gender','Group','Scale12'})
+[p,t,stats,~] = anovan((lppFix),{ms mg c07 c12},'model','interaction','varnames',{'Gender','Group','Scale07','Scale12'})

@@ -13,6 +13,7 @@ suf2='b-Cue Reactivity EEG.log';
 lppNeuCells={};
 lppAlcCells={};
 lppFodCells={};
+lppFixCells={};
 
 hrValues=[];
 bpmValues=[];
@@ -22,6 +23,18 @@ apstdValues=[];
 lppAmpValues=[];
 lppAmpStdValues=[];
 
+lppAmpNeuValues=[];
+lppAmpNeuStdValues=[];
+
+lppAmpAlcValues=[];
+lppAmpAlcStdValues=[];
+
+lppAmpFodValues=[];
+lppAmpFodStdValues=[];
+
+lppAmpFixValues=[];
+lppAmpFixStdValues=[];
+
 hrValues1=[];
 bpmValues1=[];
 apValues1=[];
@@ -29,6 +42,18 @@ apstdValues1=[];
 
 lppAmpValues1=[];
 lppAmpStdValues1=[];
+
+lppAmpNeuValues1=[];
+lppAmpNeuStdValues1=[];
+
+lppAmpAlcValues1=[];
+lppAmpAlcStdValues1=[];
+
+lppAmpFodValues1=[];
+lppAmpFodStdValues1=[];
+
+lppAmpFixValues1=[];
+lppAmpFixStdValues1=[];
 
 hrvValues=[];
 hrvValues1=[];
@@ -114,6 +139,18 @@ EEG = lppParameters(EEG,timeOutputs1,eegChan);
 ampBad1=EEG.ampBad;
 ampStd1=EEG.ampBadStd;
 
+ampNeu1=EEG.ampNeu;
+ampNeuStd1=EEG.ampNeuStd;
+
+ampAlc1=EEG.ampAlc;
+ampAlcStd1=EEG.ampAlcStd;
+
+ampFod1=EEG.ampFod;
+ampFodStd1=EEG.ampFodStd;
+
+ampFix1=EEG.ampFix;
+ampFixStd1=EEG.ampFixStd;
+
 EEG = pop_biosig(ffName2);
 timeOutputs2 = tryEpochIndex(EEG,timeOutputs2);
 [EEG,params] = tryPreproc(EEG);
@@ -124,6 +161,42 @@ EEG = lppParameters(EEG,timeOutputs1,eegChan);
 [bpm12, hr12, meanRR12, stdRR12, alphaPower12, alphaStd12,hrv12,hrvStd12] = calcBpm(EEG,ekgPeaks,eegChan);
 ampBad2=EEG.ampBad;
 ampStd2=EEG.ampBadStd;
+
+ampNeu2=EEG.ampNeu;
+ampNeuStd2=EEG.ampNeuStd;
+
+ampAlc2=EEG.ampAlc;
+ampAlcStd2=EEG.ampAlcStd;
+
+ampFod2=EEG.ampFod;
+ampFodStd2=EEG.ampFodStd;
+
+ampFix2=EEG.ampFix;
+ampFixStd2=EEG.ampFixStd;
+
+lppAmpNewNeuValues=[ampNeu1 ampNeu2];
+lppAmpNeuValues(ki,:)=lppAmpNewNeuValues;
+
+lppAmpNewNeuValues=[ampNeuStd1 ampNeuStd2];
+lppAmpNeuStdValues(ki,:)=lppAmpNewNeuValues;
+
+lppAmpNewNeuValues=[ampAlc1 ampAlc2];
+lppAmpAlcValues(ki,:)=lppAmpNewNeuValues;
+
+lppAmpNewNeuValues=[ampAlcStd1 ampAlcStd2];
+lppAmpAlcStdValues(ki,:)=lppAmpNewNeuValues;
+
+lppAmpNewNeuValues=[ampFod1 ampFod2];
+lppAmpFodValues(ki,:)=lppAmpNewNeuValues;
+
+lppAmpNewNeuValues=[ampFodStd1 ampFodStd2];
+lppAmpFodStdValues(ki,:)=lppAmpNewNeuValues;
+
+lppAmpNewNeuValues=[ampFix1 ampFix2];
+lppAmpFixValues(ki,:)=lppAmpNewNeuValues;
+
+lppAmpNewNeuValues=[ampFixStd1 ampFixStd2];
+lppAmpFixStdValues(ki,:)=lppAmpNewNeuValues;
 
 lppAmp=[ampBad1 ampBad2];
 lppAmpValues1(ki,:)=lppAmp;
@@ -158,10 +231,12 @@ hrvstdValues1(ki,:)=hrvstd;
 neuCase=EEG.neuEpochs;
 alcCase=EEG.alcEpochs;
 fodCase=EEG.fodEpochs;
+fixCase=EEG.fixEpochs;
 
 lppNeuCells{mki}=neuCase;
 lppAlcCells{mki}=alcCase;
 lppFodCells{mki}=fodCase;
+lppFixCells{mki}=fixCase;
 
 mki=mki+1;
 
@@ -216,7 +291,29 @@ hrvValues1(ki,:)=hrv;
 hrvstd=[0 0];
 hrvstdValues1(ki,:)=hrvstd;
 
+lppAmpNewNeuValues=[0 0];
+lppAmpNeuValues(ki,:)=lppAmpNewNeuValues;
 
+lppAmpNewNeuValues=[0 0];
+lppAmpNeuStdValues(ki,:)=lppAmpNewNeuValues;
+
+lppAmpNewNeuValues=[0 0];
+lppAmpAlcValues(ki,:)=lppAmpNewNeuValues;
+
+lppAmpNewNeuValues=[0 0];
+lppAmpAlcStdValues(ki,:)=lppAmpNewNeuValues;
+
+lppAmpNewNeuValues=[0 0];
+lppAmpFodValues(ki,:)=lppAmpNewNeuValues;
+
+lppAmpNewNeuValues=[0 0];
+lppAmpFodStdValues(ki,:)=lppAmpNewNeuValues;
+
+lppAmpNewNeuValues=[0 0];
+lppAmpFixValues(ki,:)=lppAmpNewNeuValues;
+
+lppAmpNewNeuValues=[0 0];
+lppAmpFixStdValues(ki,:)=lppAmpNewNeuValues;
 
 
 end
@@ -251,11 +348,23 @@ tryBatch{32}=restHrvStdTime;
 tryBatch{33}=cueHrvTime;
 tryBatch{34}=cueHrvStdTime;
 
+tryBatch{40}=lppAmpNeuValues;
+tryBatch{41}=lppAmpNeuStdValues;
+
+tryBatch{42}=lppAmpAlcValues;
+tryBatch{43}=lppAmpAlcStdValues;
+
+tryBatch{44}=lppAmpFodValues;
+tryBatch{45}=lppAmpFodStdValues;
+
+tryBatch{46}=lppAmpFixValues;
+tryBatch{47}=lppAmpFixStdValues;
+
 tryBatch{51}=lppAmpValues1;
 tryBatch{52}=lppAmpStdValues1;
 
 
-%save('tryCompareRestCue.mat',"tryBatch");
+save('tryCompareRestCue.mat',"tryBatch");
 
 %[h1,p1]=ttest2(bpmValues(:,1),bpmValues(:,2));
 %[h2,p2]=ttest2(hrValues(:,1),hrValues(:,2));
@@ -263,3 +372,4 @@ tryBatch{52}=lppAmpStdValues1;
 save('lppNeuCells.mat','lppNeuCells');
 save('lppAlcCells.mat','lppAlcCells');
 save('lppFodCells.mat','lppFodCells');
+save('lppFixCells.mat','lppFixCells');

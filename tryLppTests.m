@@ -35,6 +35,16 @@ lppAmpFodStdValues=tryBatch{45};
 lppAmpFixValues=tryBatch{46};
 lppAmpFixStdValues=tryBatch{47};
 
+lppNeuMean=mean(cleanUp(lppAmpNeuValues(:,1)));
+lppAlcMean=mean(cleanUp(lppAmpAlcValues(:,1)));
+lppFodMean=mean(cleanUp(lppAmpFodValues(:,1)));
+lppFixMean=mean(cleanUp(lppAmpFixValues(:,1)));
+
+lppNeuStd=std(cleanUp(lppAmpNeuValues(:,1)));
+lppAlcStd=std(cleanUp(lppAmpAlcValues(:,1)));
+lppFodStd=std(cleanUp(lppAmpFodValues(:,1)));
+lppFixStd=std(cleanUp(lppAmpFixValues(:,1)));
+
 %% round 1 tests
 % tests: Rest vs Cue
 % rest1 vs rest2
@@ -45,28 +55,6 @@ rest=restMeanTime(:);
 restsig=restStdTime(:);
 cue=cueMeanTime(:);
 cuesig=cueStdTime(:);
-
-[h1,p1]=ttest2(cue,rest);
-%test2: rest1 vs rest2
-[h2,p2]=ttest2(restMeanTime(:,1),restMeanTime(:,2));
-%test3: cue1 vs cue2
-%[h3,p3]=ttest2(cueMeanTime(:,1),cueMeanTime(:,2));
-
-% test 4: hr and alpha
-[h81,p81]=ttest2(cueMeanTime(:,1),apValues(:,1));
-[h82,p82]=ttest2(cueMeanTime(:,2),apValues(:,2));
-[h91,p91]=ttest2(restMeanTime(:,1),apValues1(:,1));
-[h92,p92]=ttest2(restMeanTime(:,2),apValues1(:,2));
-
-[hlpp,plpp]=ttest2(lppAmpValues1(:,1),lppAmpValues1(:,2));
-
-% test 5: hrv
-[h01,p01]=ttest2(restHrvMeanTime(:),cueHrvTime(:));
-%test2: rest1 vs rest2
-[h02,p02]=ttest2(restHrvMeanTime(:,1),restHrvMeanTime(:,2));
-%test3: cue1 vs cue2
-[h03,p03]=ttest2(cueHrvTime(:,1),cueHrvTime(:,2));
-
 
 testR2C1=[];
 testR1C2=[];
@@ -398,7 +386,7 @@ tryBatch{38}=hrvphiS2R;
 
 tryBatch{39}=hrvpresid;
 
-save('tryCompareRestCue.mat',"tryBatch");
+%save('tryCompareRestCue.mat',"tryBatch");
 
 
 
