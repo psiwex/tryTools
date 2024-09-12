@@ -1,6 +1,16 @@
 %https://www.mathworks.com/help/stats/repeatedmeasuresmodel.ranova.html
 tic;
 
+
+%new categories
+%-0: no trauma
+%-1: trauma but no PTSD
+%-2: trauma and PTSD (lifetime/current)
+
+
+
+pvalue=1;
+fs=1024;
 homeDir='C:\Users\John\Documents\MATLAB\tryEeg\CUE_REST\';
 channelLocationFile = 'C:\Users\John\Documents\MATLAB\eeglab2021.1\plugins\dipfit\standard_BESA\standard-10-5-cap385.elp';
 
@@ -13,7 +23,7 @@ ki=1;
 subNum='TRY001';
 subTxt={};
 
-
+subs=2;
 
 
 
@@ -84,6 +94,11 @@ cueHrvStdTime=tryBatch{34};
 hrv=[cueHrvTime(:,1); cueHrvTime(:,2)];
 
 x=[cueHrvTime(:,1) apValues1(:,1) mainGen mainAge mainGroup];
+
+hrvRest=restHrvMeanTime(:,1);
+xisn=isnan(hrvRest);
+
+hrvRest(xisn==1)=0;
 
 lpp=tryBatch{50};
 lppOld=tryBatch{51};
@@ -191,7 +206,7 @@ end
 
 end
 
-
+%hrvRest1=hrvRest(mainIndex2);
 % call index
 c01=col1(mainIndex2);
 c02=col2(mainIndex2);
@@ -254,23 +269,201 @@ x=[lppOld(:,1) lppAmpNeuValues(:,1) lppAmpAlcValues(:,1) lppAmpFodValues(:,1) cu
 
 x=[lppAmpNeuValues(:,1) lppAmpAlcValues(:,1) lppAmpFodValues(:,1) cueHrvTime(:,1) apValues1(:,1) mainGen mainAge c01 c02 c03 c04 c05 c06 c07 c08 c09 c10 c11 c12];
 
+x=[lppAmpNeuValues(:,1) lppAmpAlcValues(:,1) lppAmpFodValues(:,1) cueHrvTime(:,1) apValues1(:,1) mainGen mainAge];
+
+%x=[lppAmpNeuValues(:,1) lppAmpAlcValues(:,1) lppAmpFodValues(:,1) cueHrvTime(:,1) apValues1(:,1)];
 
 mainData=x;
+
+
 
 gLabels1=groupLabels1(mainIndex2);
 gLabels2=groupLabels2(mainIndex2);
 gLabels3=groupLabels3(mainIndex2);
 gLabels4=groupLabels4(mainIndex2);
 
-[data1,labels1]=tryFormat(mainData,gLabels1);
 
-[data2,labels2]=tryFormat(mainData,gLabels2);
 
-[data3,labels3]=tryFormat(mainData,gLabels3);
+% 
+% [data1,labels1]=tryFormat(mainData,gLabels1);
+% [data2,labels2]=tryFormat(mainData,gLabels2);
+% [data3,labels3]=tryFormat(mainData,gLabels3);
+% [data4,labels4]=tryFormat(mainData,gLabels4);
+% 
+% [data1,labels1]=classBalance(data1,labels1,subs);
+% [data2,labels2]=classBalance(data2,labels2,subs);
+% [data3,labels3]=classBalance(data3,labels3,subs);
+% [data4,labels4]=classBalance(data4,labels4,subs);
 
-[data4,labels4]=tryFormat(mainData,gLabels4);
-pvalue=5;
 subs=2;
+% [z_measures1,z_phi1,z_phiclassic1,z_aucroc1,z_accuracy1,z_sensitivity1,z_specificity1,z_acc21,z_ppv1,z_npv1,z_f1]=lda_adenz_mval(subs,data1,labels1,pvalue);
+% [z_measures2,z_phi2,z_phiclassic2,z_aucroc2,z_accuracy2,z_sensitivity2,z_specificity2,z_acc22,z_ppv2,z_npv2,z_f12]=lda_adenz_mval(subs,data2,labels2,pvalue);
+% [z_measures3,z_phi3,z_phiclassic3,z_aucroc3,z_accuracy3,z_sensitivity3,z_specificity3,z_acc23,z_ppv3,z_npv3,z_f13]=lda_adenz_mval(subs,data3,labels3,pvalue);
+% [z_measures4,z_phi4,z_phiclassic4,z_aucroc4,z_accuracy4,z_sensitivity4,z_specificity4,z_acc24,z_ppv4,z_npv4,z_f14]=lda_adenz_mval(subs,data4,labels4,pvalue);
+% 
+% [mean_measures1,mean_phi1,mean_phiclassic1,mean_aucroc1,mean_accuracy1,mean_sensitivity1,mean_specificity1,mean_acc21,mean_ppv1,mean_npv1,mean_f1]=lda_aden_mval(subs,data1,labels1,pvalue);
+% [mean_measures2,mean_phi2,mean_phiclassic2,mean_aucroc2,mean_accuracy2,mean_sensitivity2,mean_specificity2,mean_acc22,mean_ppv2,mean_npv2,mean_f12]=lda_aden_mval(subs,data2,labels2,pvalue);
+% [mean_measures3,mean_phi3,mean_phiclassic3,mean_aucroc3,mean_accuracy3,mean_sensitivity3,mean_specificity3,mean_acc23,mean_ppv3,mean_npv3,mean_f13]=lda_aden_mval(subs,data3,labels3,pvalue);
+
+% outs=[z_phi1 z_phi2 z_phi3 z_phi4 mean_phi1 mean_phi2 mean_phi3 0];
+% outacc=[z_accuracy1 z_accuracy2 z_accuracy3 z_accuracy4 mean_accuracy1 mean_accuracy2 mean_accuracy3 0];
+% outf1=[z_f1 z_f12 z_f13 z_f14 mean_f1 mean_f12 mean_f13 0]
+% try
+%[mean_measures4,mean_phi4,mean_phiclassic4,mean_aucroc4,mean_accuracy4,mean_sensitivity4,mean_specificity4,mean_acc24,mean_ppv4,mean_npv4,mean_f14]=lda_aden_mval(subs,data4,labels4,pvalue);
+% 
+% outs=[z_phi1 z_phi2 z_phi3 z_phi4 mean_phi1 mean_phi2 mean_phi3 mean_phi4];
+% outf1=[z_f1 z_f12 z_f13 z_f14 mean_f1 mean_f12 mean_f13 mean_f14]
+% outacc=[z_accuracy1 z_accuracy2 z_accuracy3 z_accuracy4 mean_accuracy1 mean_accuracy2 mean_accuracy3 mean_accuracy4];
+% 
+% xval=comparisonTests(data1,labels1,subs,pvalue,fs);
+% [scores,acc,f1,phi,itr]=unwrapStruct(xval);
+% [q1,~,~,~]=feature_selection_adenz(data1{1}',labels1{1},data1{1}',pvalue);
+% [q2,~,~,~]=feature_selection_adenz(data2{1}',labels2{1},data2{1}',pvalue);
+% [q3,~,~,~]=feature_selection_adenz(data3{1}',labels3{1},data3{1}',pvalue);
+% [q4,~,~,~]=feature_selection_adenz(data4{1}',labels4{1},data4{1}',pvalue);
+
+
+%% loading megalith project
+
+
+megalith1 = readtable('megaLith1.xlsx');
+x1=table2cell(megalith1(:,1));
+x2=table2cell(megalith1(:,2));
+x3=table2cell(megalith1(:,3));
+x4=table2cell(megalith1(:,4));
+x5=table2cell(megalith1(:,5));
+x6=table2cell(megalith1(:,6));
+x7=table2cell(megalith1(:,7));
+x8=table2cell(megalith1(:,8));
+x9=table2cell(megalith1(:,9));
+x10=table2cell(megalith1(:,10));
+x11=table2cell(megalith1(:,11));
+x12=table2cell(megalith1(:,12));
+x13=table2cell(megalith1(:,13));
+x14=table2cell(megalith1(:,14));
+x15=table2cell(megalith1(:,15));
+x16=table2cell(megalith1(:,16));
+x17=table2cell(megalith1(:,17));
+x18=table2cell(megalith1(:,18));
+x19=table2cell(megalith1(:,19));
+x20=table2cell(megalith1(:,20));
+x21=table2cell(megalith1(:,21));
+x22=table2cell(megalith1(:,22));
+x23=table2cell(megalith1(:,23));
+x24=table2cell(megalith1(:,24));
+x25=table2cell(megalith1(:,25));
+x26=table2cell(megalith1(:,26));
+x27=table2cell(megalith1(:,27));
+x28=table2cell(megalith1(:,28));
+x29=table2cell(megalith1(:,29));
+x30=table2cell(megalith1(:,30));
+x31=table2cell(megalith1(:,31));
+x32=table2cell(megalith1(:,32));
+x33=table2cell(megalith1(:,33));
+x34=table2cell(megalith1(:,34));
+x35=table2cell(megalith1(:,35));
+x36=table2cell(megalith1(:,36));
+
+y1=cell2mat(x1);
+y2=cell2mat(x2);
+y3=cell2mat(x3);
+y4=cell2mat(x4);
+y5=cell2mat(x5);
+y6=cell2mat(x6);
+y7=cell2mat(x7);
+y8=cell2mat(x8);
+y9=cell2mat(x9);
+y10=cell2mat(x10);
+y11=cell2mat(x11);
+y12=cell2mat(x12);
+y13=cell2mat(x13);
+y14=cell2mat(x14);
+y15=cell2mat(x15);
+y16=cell2mat(x16);
+y17=cell2mat(x17);
+y18=cell2mat(x18);
+y19=cell2mat(x19);
+y20=cell2mat(x20);
+y21=cell2mat(x21);
+y22=cell2mat(x22);
+y23=cell2mat(x23);
+y24=cell2mat(x24);
+y25=cell2mat(x25);
+y26=cell2mat(x26);
+y27=cell2mat(x27);
+y28=cell2mat(x28);
+y29=cell2mat(x29);
+y30=cell2mat(x30);
+y31=cell2mat(x31);
+y32=cell2mat(x32);
+y33=cell2mat(x33);
+y34=cell2mat(x34);
+y35=cell2mat(x35);
+y36=cell2mat(x36);
+
+%% convert to proper index
+z1=y1(mainIndex2);
+z2=y2(mainIndex2);
+z3=y3(mainIndex2);
+z4=y4(mainIndex2);
+z5=y5(mainIndex2);
+z6=y6(mainIndex2);
+z7=y7(mainIndex2);
+z8=y8(mainIndex2);
+z9=y9(mainIndex2);
+z10=y10(mainIndex2);
+z11=y11(mainIndex2);
+z12=y12(mainIndex2);
+z13=y13(mainIndex2);
+z14=y14(mainIndex2);
+z15=y15(mainIndex2);
+z16=y16(mainIndex2);
+z17=y17(mainIndex2);
+z18=y18(mainIndex2);
+z19=y19(mainIndex2);
+z20=y20(mainIndex2);
+z21=y21(mainIndex2);
+z22=y22(mainIndex2);
+z23=y23(mainIndex2);
+z24=y24(mainIndex2);
+z25=y25(mainIndex2);
+z26=y26(mainIndex2);
+z27=y27(mainIndex2);
+z28=y28(mainIndex2);
+z29=y29(mainIndex2);
+z30=y30(mainIndex2);
+z31=y31(mainIndex2);
+z32=y32(mainIndex2);
+z33=y33(mainIndex2);
+z34=y34(mainIndex2);
+z35=y35(mainIndex2);
+z36=y36(mainIndex2);
+
+% newMain
+%x=[lppAmpNeuValues(:,1) lppAmpAlcValues(:,1) lppAmpFodValues(:,1) cueHrvTime(:,1) hrvRest apValues1(:,1) z2 z3 z8 z9 z10 z11 z12 z13 z14 z15 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z35 z36];
+
+
+x=[mainIndex2' lppAmpNeuValues(:,1) lppAmpAlcValues(:,1) lppAmpFodValues(:,1) cueHrvTime(:,1) hrvRest apValues1(:,1) z2 z3 z8 z9 z10 z11 z12 z13 z14 z15 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z36];
+
+%x=[lppAmpNeuValues(:,1) lppAmpAlcValues(:,1) lppAmpFodValues(:,1) cueHrvTime(:,1) hrvRest apValues1(:,1) z27 z28 z29 z30];
+% top physio: lppAmpFod
+
+%x=[cueHrvTime(:,1) hrvRest apValues1(:,1) z27 z28 z29 z30];
+
+
+% top predictors outside ACES: fam_conflict, fam_management, fam_proreward
+mainData=x;
+
+[data1,labels1]=tryFormat(mainData,z4);
+[data2,labels2]=tryFormat(mainData,z5);
+[data3,labels3]=tryFormat(mainData,z6);
+[data4,labels4]=tryFormat(mainData,z7);
+
+[data1,labels1]=classBalance(data1,labels1,subs);
+[data2,labels2]=classBalance(data2,labels2,subs);
+[data3,labels3]=classBalance(data3,labels3,subs);
+[data4,labels4]=classBalance(data4,labels4,subs);
+
 [z_measures1,z_phi1,z_phiclassic1,z_aucroc1,z_accuracy1,z_sensitivity1,z_specificity1,z_acc21,z_ppv1,z_npv1,z_f1]=lda_adenz_mval(subs,data1,labels1,pvalue);
 [z_measures2,z_phi2,z_phiclassic2,z_aucroc2,z_accuracy2,z_sensitivity2,z_specificity2,z_acc22,z_ppv2,z_npv2,z_f12]=lda_adenz_mval(subs,data2,labels2,pvalue);
 [z_measures3,z_phi3,z_phiclassic3,z_aucroc3,z_accuracy3,z_sensitivity3,z_specificity3,z_acc23,z_ppv3,z_npv3,z_f13]=lda_adenz_mval(subs,data3,labels3,pvalue);
@@ -280,14 +473,73 @@ subs=2;
 [mean_measures2,mean_phi2,mean_phiclassic2,mean_aucroc2,mean_accuracy2,mean_sensitivity2,mean_specificity2,mean_acc22,mean_ppv2,mean_npv2,mean_f12]=lda_aden_mval(subs,data2,labels2,pvalue);
 [mean_measures3,mean_phi3,mean_phiclassic3,mean_aucroc3,mean_accuracy3,mean_sensitivity3,mean_specificity3,mean_acc23,mean_ppv3,mean_npv3,mean_f13]=lda_aden_mval(subs,data3,labels3,pvalue);
 
-outs=[z_phi1 z_phi2 z_phi3 z_phi4 mean_phi1 mean_phi2 mean_phi3 0];
-outf1=[z_f1 z_f12 z_f13 z_f14 mean_f1 mean_f12 mean_f13 0]
-try
+% outs=[z_phi1 z_phi2 z_phi3 z_phi4 mean_phi1 mean_phi2 mean_phi3 0];
+% outacc=[z_accuracy1 z_accuracy2 z_accuracy3 z_accuracy4 mean_accuracy1 mean_accuracy2 mean_accuracy3 0];
+% outf1=[z_f1 z_f12 z_f13 z_f14 mean_f1 mean_f12 mean_f13 0]
+% try
 [mean_measures4,mean_phi4,mean_phiclassic4,mean_aucroc4,mean_accuracy4,mean_sensitivity4,mean_specificity4,mean_acc24,mean_ppv4,mean_npv4,mean_f14]=lda_aden_mval(subs,data4,labels4,pvalue);
 
-outs=[z_phi1 z_phi2 z_phi3 z_phi4 mean_phi1 mean_phi2 mean_phi3 mean_phi4];
-outf1=[z_f1 z_f12 z_f13 z_f14 mean_f1 mean_f12 mean_f13 mean_f14]
-pass
+zouts=[z_phi1 z_phi2 z_phi3 z_phi4 mean_phi1 mean_phi2 mean_phi3 mean_phi4];
+zoutf1=[z_f1 z_f12 z_f13 z_f14 mean_f1 mean_f12 mean_f13 mean_f14]
+zoutacc=[z_accuracy1 z_accuracy2 z_accuracy3 z_accuracy4 mean_accuracy1 mean_accuracy2 mean_accuracy3 mean_accuracy4];
 
-end
+xval=comparisonTests(data1,labels1,subs,pvalue,fs);
+[dscores,dacc,df1,dphi,ditr]=unwrapStruct(xval);
+[u1,~,~,~]=feature_selection_adenz(data1{1}',labels1{1},data1{1}',pvalue);
+[u2,~,~,~]=feature_selection_adenz(data2{1}',labels2{1},data2{1}',pvalue);
+[u3,~,~,~]=feature_selection_adenz(data3{1}',labels3{1},data3{1}',pvalue);
+[u4,~,~,~]=feature_selection_adenz(data4{1}',labels4{1},data4{1}',pvalue);
+
+%z4, z6, z7
+% adens: u1=27, u2=38, u3=24, u=31, 21; 13, 21, 24, 27, 31, 38
+zz1=z4+z6+z7;
+abc=zz1;
+dz1=find(zz1>1);
+zz1(dz1)=1;
+dz0=find(zz1<0);
+zz1(dz0)=0;
+% level 2 category
+%-0: no trauma
+%-1: trauma but no PTSD
+%-2: trauma and PTSD (lifetime/current)
+
+[data0,labels0]=tryFormat(mainData,zz1);
+[data0,labels0]=classBalance(data0,labels0,subs);
+[z_measures0,z_phi0,z_phiclassic0,z_aucroc0,z_accuracy0,z_sensitivity0,z_specificity0,z_acc20,z_ppv0,z_npv0,z_f10]=lda_adenz_mval(subs,data0,labels0,pvalue);
+[mean_measures0,mean_phi0,mean_phiclassic0,mean_aucroc0,mean_accuracy0,mean_sensitivity0,mean_specificity0,mean_acc20,mean_ppv0,mean_npv0,mean_f10]=lda_aden_mval(subs,data0,labels0,pvalue);
+xval=comparisonTests(data0,labels0,subs,pvalue,fs);
+[scores,acc,f1,phi,itr]=unwrapStruct(xval);
+[u0,~,~,~]=feature_selection_adenz(data0{1}',labels0{1},data0{1}',pvalue);
+% compare level 0 vs level 2
+[r2,~,~,~]=feature_selection_adenz(mainData,zz1,mainData,pvalue);
+
+zData=zscore(mainData);
+
+%compare level 0 vs level 1
+[r1,~,~,~]=feature_selection_adenz(mainData,z4,mainData,pvalue);
+% [r2,~,~,~]=feature_selection_adenz(mainData,z5,mainData,pvalue);
+% [r3,~,~,~]=feature_selection_adenz(mainData,z6,mainData,pvalue);
+% [r4,~,~,~]=feature_selection_adenz(mainData,z7,mainData,pvalue);
+% 
+% 
+% csvwrite('tryPrimeData.csv', mainData);
+% csvwrite('tryLabels10.csv', z4);
+% csvwrite('tryLabels20.csv', zz1);
+% csvwrite('tryLabels30.csv', abc);
+
+% csvwrite('tryZData.csv', zData)
+
+
+
+
+kAs=find(hrvRest~=0);
+Vr1=hrvRest(kAs);
+
+Xr1=1:length(Vr1);
+Xq1=1:1:193;
+Vq1 = interp1(Xr1,Vr1,Xq1)';
+p = polyfit(Xr1,Vr1,3);
+Vq1 = polyval(p,Xq1)';
+
+outVal = Vq1(randperm(size(Vq1,1)),:);
 
