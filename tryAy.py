@@ -63,10 +63,6 @@ y2[np.isinf(y2)] = 0
 y3[np.isnan(y3)] = 0
 y3[np.isinf(y3)] = 0
 
-X0=np.copy(X)
-
-
-
 runCats=np.squeeze(np.unique(y3))
 aFeatures0,totalLength,X1,X2=featureSelect(X, y1, featureNumber, 0)
 aFeatures1,totalLength,X1,X2=featureSelect(X, y1, featureNumber, 1)
