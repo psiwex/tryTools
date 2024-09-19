@@ -269,7 +269,7 @@ x=[lppOld(:,1) lppAmpNeuValues(:,1) lppAmpAlcValues(:,1) lppAmpFodValues(:,1) cu
 
 x=[lppAmpNeuValues(:,1) lppAmpAlcValues(:,1) lppAmpFodValues(:,1) cueHrvTime(:,1) apValues1(:,1) mainGen mainAge c01 c02 c03 c04 c05 c06 c07 c08 c09 c10 c11 c12];
 
-x=[lppAmpNeuValues(:,1) lppAmpAlcValues(:,1) lppAmpFodValues(:,1) cueHrvTime(:,1) apValues1(:,1) mainGen mainAge];
+XP=[lppAmpNeuValues(:,1) lppAmpAlcValues(:,1) lppAmpFodValues(:,1) cueHrvTime(:,1) apValues1(:,1) mainGen mainAge];
 
 %x=[lppAmpNeuValues(:,1) lppAmpAlcValues(:,1) lppAmpFodValues(:,1) cueHrvTime(:,1) apValues1(:,1)];
 
@@ -443,7 +443,12 @@ z36=y36(mainIndex2);
 %x=[lppAmpNeuValues(:,1) lppAmpAlcValues(:,1) lppAmpFodValues(:,1) cueHrvTime(:,1) hrvRest apValues1(:,1) z2 z3 z8 z9 z10 z11 z12 z13 z14 z15 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z35 z36];
 
 
-x=[mainIndex2' lppAmpNeuValues(:,1) lppAmpAlcValues(:,1) lppAmpFodValues(:,1) cueHrvTime(:,1) hrvRest apValues1(:,1) z2 z3 z8 z9 z10 z11 z12 z13 z14 z15 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z36];
+x=[mainIndex2' lppAmpNeuValues(:,1) lppAmpAlcValues(:,1) lppAmpFodValues(:,1) cueHrvTime(:,1) hrvRest apValues1(:,1) z2 z3 z8 z9 z10 z11 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z36];
+
+
+
+XP=[hrvRest lppAmpNeuValues(:,1) lppAmpAlcValues(:,1) lppAmpFodValues(:,1) cueHrvTime(:,1) apValues1(:,1) mainGen mainAge];
+
 
 %x=[lppAmpNeuValues(:,1) lppAmpAlcValues(:,1) lppAmpFodValues(:,1) cueHrvTime(:,1) hrvRest apValues1(:,1) z27 z28 z29 z30];
 % top physio: lppAmpFod
@@ -543,3 +548,89 @@ Vq1 = polyval(p,Xq1)';
 
 outVal = Vq1(randperm(size(Vq1,1)),:);
 
+megalith2 = readtable('lifetime_ad_variable.csv');
+xy1=table2cell(megalith2(:,1));
+xy2=table2cell(megalith2(:,2));
+yy1=cell2mat(xy1);
+yy2=cell2mat(xy2);
+mz2=yy2(mainIndex2);
+pvalue=1;
+[m2,~,~,~]=feature_selection_adenz(mainData,mz2,mainData,pvalue);
+[datam,labelsm]=tryFormat(mainData,mz2);
+[datam,labelsm]=classBalance(datam,labelsm,subs);
+[m_measures0,m_phi0,m_phiclassic0,m_aucroc0,m_accuracy0,m_sensitivity0,m_specificity0,m_acc20,m_ppv0,m_npv0,m_f10]=lda_adenz_mval(subs,data0,labels0,pvalue);
+
+xval=comparisonTests(datam,labelsm,subs,pvalue,fs);
+[scores,acc,f1,phi,itr]=unwrapStruct(xval);
+%csvwrite('tryLabelsAD.csv', mz2);
+% add GAD. Better as a label than a feature. 
+% mainData(:,38)=mz2;
+% [m3,~,~,~]=feature_selection_adenz(mainData,mz2,mainData,pvalue);
+% [datam,labelsm]=tryFormat(mainData,mz2);
+% [datam,labelsm]=classBalance(datam,labelsm,subs);
+% [m_measures0,m_phi0,m_phiclassic0,m_aucroc0,m_accuracy0,m_sensitivity0,m_specificity0,m_acc20,m_ppv0,m_npv0,m_f10]=lda_adenz_mval(subs,data0,labels0,pvalue);
+% 
+% xval=comparisonTests(datam,labelsm,subs,pvalue,fs);
+% [scores,acc,f1,phi,itr]=unwrapStruct(xval);
+
+
+[datam1,labelsm1]=tryFormat(XP,mz2);
+[d1,l1]=classBalance(datam1,labelsm1,subs);
+[m_measures0,m_phi0,m_phiclassic0,m_aucroc0,m_accuracy0,m_sensitivity0,m_specificity0,m_acc20,m_ppv0,m_npv0,m_f10]=lda_adenz_mval(subs,d1,l1,pvalue);
+[m12,~,~,~]=feature_selection_adenz(XP,mz2,XP,pvalue);
+xval=comparisonTests(d1,l1,subs,pvalue,fs);
+[scores,acc,f1,phi,itr]=unwrapStruct(xval);
+
+
+
+xs=[mainIndex2' lppAmpNeuValues(:,1) lppAmpAlcValues(:,1) lppAmpFodValues(:,1) cueHrvTime(:,1) hrvRest apValues1(:,1) z2 z8 z9 z10 z11 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z36];
+xsLabels=z3;
+sz0=find(xsLabels==2);
+xsLabels(sz0)=0;
+
+[sd,~,~,~]=feature_selection_adenz(xs,xsLabels,xs,pvalue);
+
+% main feature between genders: BPA
+
+% gender 1
+xsl1=find(xsLabels==1);
+
+xs1=xs(xsl1,:);
+xsLab1=z4(xsl1);
+
+% gender2
+xs2=xs(sz0,:);
+xsLab2=z4(sz0);
+%z4,zz1
+
+% gender 1 tests
+
+[xd1,xl1]=tryFormat(xs1,xsLab1);
+[xd1,xl1]=classBalance(xd1,xl1,subs);
+%[m_measures0,m_phi0,m_phiclassic0,m_aucroc0,m_accuracy0,m_sensitivity0,m_specificity0,m_acc20,m_ppv0,m_npv0,m_f10]=lda_adenz_mval(subs,d1,l1,pvalue);
+xval=comparisonTests(xd1,xl1,subs,pvalue,fs);
+[scores,x1acc,x1f1,x1phi,x1itr]=unwrapStruct(xval);
+
+[sd1,~,~,~]=feature_selection_adenz(xs1,xsLab1,xs1,pvalue);
+
+% gender 2 tests
+[xd2,xl2]=tryFormat(xs2,xsLab2);
+[xd2,xl2]=classBalance(xd2,xl2,subs);
+%[m_measures0,m_phi0,m_phiclassic0,m_aucroc0,m_accuracy0,m_sensitivity0,m_specificity0,m_acc20,m_ppv0,m_npv0,m_f10]=lda_adenz_mval(subs,d1,l1,pvalue);
+xval=comparisonTests(xd2,xl2,subs,pvalue,fs);
+[scores,x2acc,x2f1,x2phi,x2itr]=unwrapStruct(xval);
+[sd2,~,~,~]=feature_selection_adenz(xs2,xsLab2,xs2,pvalue);
+% Just an update on AI classification of GAD.
+% 
+% Without the psychosocial metrics, the top feature is age.
+% 
+% Accuracy is about 60%, with an F1 score around 0.76.
+% 
+% Parental and family scores seem to be best predictors thus far, as with
+% trauma/PTSD.
+% 
+% When dealing with gender differences, the biggest difference between genders was BPA.
+% 
+% When running analysis between male and female, the two top features were sub_parent_environment and fam_manage.
+% 
+% We can separate a patient with a pathology (trauma, PTSD) away from baseline ones easily enough (75% acc). Not much difference between specific subs in terms of 'easier to automatically classify.'
