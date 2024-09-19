@@ -45,6 +45,7 @@ X = genfromtxt('tryZData.csv', delimiter=',')
 y1 = genfromtxt('tryLabels10.csv', delimiter=',')
 y2 = genfromtxt('tryLabels20.csv', delimiter=',')
 y3 = genfromtxt('tryLabels30.csv', delimiter=',')
+y4 = genfromtxt('tryLabelsAD.csv', delimiter=',')
 
 print(np.shape(X))
 print(np.shape(y1))
@@ -63,12 +64,17 @@ y2[np.isinf(y2)] = 0
 y3[np.isnan(y3)] = 0
 y3[np.isinf(y3)] = 0
 
+y4[np.isnan(y4)] = 0
+y4[np.isinf(y4)] = 0
+
+
 runCats=np.squeeze(np.unique(y3))
 aFeatures0,totalLength,X1,X2=featureSelect(X, y1, featureNumber, 0)
 aFeatures1,totalLength,X1,X2=featureSelect(X, y1, featureNumber, 1)
 aFeatures3,totalLength,X1,X2=featureSelect(X, y3, featureNumber, 2)
+aFeatures4,totalLength,X1,X2=featureSelect(X, y4, featureNumber, 1)
 
-aFeatures=np.unique(np.hstack([aFeatures0.flatten(), aFeatures1.flatten(), aFeatures3.flatten()])).flatten()
+aFeatures=np.unique(np.hstack([aFeatures0.flatten(), aFeatures1.flatten(), aFeatures3.flatten(), aFeatures4.flatten()])).flatten()
 
 bFeatures0,totalLength,X1,X2=featureSelect(X, y2, featureNumber, 0)
 bFeatures1,totalLength,X1,X2=featureSelect(X, y2, featureNumber, 1)
@@ -268,7 +274,7 @@ print("F1 Score: %0.2f (+/- %0.2f)" % (scores.mean()-.01, scores.std()+.01 * 2))
 #clf.fit(X, y)
 
 
-ca1finalAcc,ca1finalF1,cb1fsAcc,cb1fsF1,ca2finalAcc,ca2finalF1,cb2fsAcc,cb2fsF1,ca3finalAcc,ca3finalF1,cb3fsAcc,cb3fsF1,ca4finalAcc,ca4finalF1,cb4fsAcc,cb4fsF1,ca5finalAcc,ca5finalF1,cb5fsAcc,cb5fsF1,ca6finalAcc,ca6finalF1,cb6fsAcc,cb6fsF1=classOutputs(N,X,y3,featureNumber)
+ca1finalAcc,ca1finalF1,cb1fsAcc,cb1fsF1,ca2finalAcc,ca2finalF1,cb2fsAcc,cb2fsF1,ca3finalAcc,ca3finalF1,cb3fsAcc,cb3fsF1,ca4finalAcc,ca4finalF1,cb4fsAcc,cb4fsF1,ca5finalAcc,ca5finalF1,cb5fsAcc,cb5fsF1,ca6finalAcc,ca6finalF1,cb6fsAcc,cb6fsF1=classOutputs(N,X,y4,featureNumber)
 
 print('Megasystem')
 print('')
