@@ -1,0 +1,12 @@
+Bin 1
+Neutral Trial
+.{11}
+
+Bin 2
+Food Trial
+.{30}
+
+Bin 3
+Alcohol Trial
+.{20}
+
