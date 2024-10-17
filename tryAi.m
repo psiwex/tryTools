@@ -7,6 +7,18 @@ tic;
 %-1: trauma but no PTSD
 %-2: trauma and PTSD (lifetime/current)
 
+load('tryRestHr.mat',"tryBatch");
+restMeanTime=tryBatch{1};
+restStdTime=tryBatch{2};
+restHrvMeanTime=tryBatch{3};
+restHrvStdTime=tryBatch{4};
+apValue=tryBatch{5};
+apstdValue=tryBatch{6};
+subNames=tryBatch{7};
+
+reHr=restMeanTime;
+reHrv=restHrvMeanTime;
+reAp=apValue;
 
 
 pvalue=1;
@@ -17,7 +29,7 @@ channelLocationFile = 'C:\Users\John\Documents\MATLAB\eeglab2021.1\plugins\dipfi
 list= dir([homeDir '\TRY*']);
 
 T = struct2table(list);
-subNames=table2cell(T(:,1));
+%subNames=table2cell(T(:,1));
 
 ki=1;
 subNum='TRY001';
@@ -93,7 +105,7 @@ cueHrvStdTime=tryBatch{34};
 
 hrv=[cueHrvTime(:,1); cueHrvTime(:,2)];
 
-x=[cueHrvTime(:,1) apValues1(:,1) mainGen mainAge mainGroup];
+%x=[cueHrvTime(:,1) apValues1(:,1) mainGen mainAge mainGroup];
 
 hrvRest=restHrvMeanTime(:,1);
 xisn=isnan(hrvRest);
@@ -143,9 +155,12 @@ tryTable=array2table({squeeze(ms(:,1)), squeeze(ma(:,1)), squeeze(mg(:,1)), sque
 %rm = fitrm(t,"hr-group~session",WithinDesign=Meas);
 %Rrm.Coefficients
 
+
 %% exam data
 %5 to 16
 T2 = readtable('TRY_baseline_scales.xlsx');
+mage1=table2cell(T2(:,3));
+mgen1=table2cell(T2(:,4));
 col1=table2cell(T2(:,5));
 col2=table2cell(T2(:,6));
 col3=table2cell(T2(:,7));
@@ -162,6 +177,8 @@ col11=table2cell(T2(:,15));
 col12=table2cell(T2(:,16));
 
 % convert them to mat
+mage2=cleanZero(cell2mat(mage1));
+mgen2=cleanZero(cell2mat(mgen1));
 col1=cleanZero(cell2mat(col1));
 col2=cleanZero(cell2mat(col2));
 col3=cleanZero(cell2mat(col3));
@@ -184,6 +201,7 @@ col12=cleanZero(cell2mat(col12));
 % mainIndex2=mainIndex-offSets;
 
 nameList=table2cell(T2(:,1));
+nameList=subNames;
 subInd=1;
 mainDex2={};
 mainIndex2=[];
@@ -208,6 +226,9 @@ end
 
 %hrvRest1=hrvRest(mainIndex2);
 % call index
+mainAge=mage2(mainIndex2);
+mainGen=mgen2(mainIndex2);
+
 c01=col1(mainIndex2);
 c02=col2(mainIndex2);
 c03=col3(mainIndex2);
@@ -222,7 +243,7 @@ c09=col9(mainIndex2);
 c10=col10(mainIndex2);
 c11=col11(mainIndex2);
 c12=col12(mainIndex2);
-x=[cueHrvTime(:,1) apValues1(:,1) mainGen mainAge mainGroup c01 c02 c03 c04 c05 c06 c07 c08 c09 c10 c11 c12];
+%x=[cueHrvTime(:,1) apValues1(:,1) mainGen mainAge mainGroup c01 c02 c03 c04 c05 c06 c07 c08 c09 c10 c11 c12];
 % the column added
 cd01=[c01; c01];
 cd02=[c02; c02];
@@ -246,6 +267,12 @@ cd12=[c12; c12];
 % rm = fitrm(t,"hr-scale12~session",WithinDesign=Meas);
 % rm.Coefficients
 
+
+creHr=reHr;
+creHrv=reHrv;
+creAp=reAp;
+
+
 scales='ius_total_baseline	ius_total_baseline_child_scale	bdi_total_baseline	bai_total_baseline	audit_total_baseline	dmqr_social_baseline	dmqr_cope_anxiety_baseline	dmqr_cope_depression_baseline	dmqr_enhancement_baseline	dmqr_conformity_baseline	pcl_total_baseline	subscore_fav_druguse_baseline';
 %scales='ius_total_baseline (scale1),	ius_total_baseline_child_scale (scale2),	bdi_total_baseline (scale3),	bai_total_baseline (scale4),	audit_total_baseline (scale5),	dmqr_social_baseline (scale6),	dmqr_cope_anxiety_baseline (scale7),	dmqr_cope_depression_baseline (scale8),	dmqr_enhancement_baseline (scale9),	dmqr_conformity_baseline (scale10),	pcl_total_baseline (scale11),	subscore_fav_druguse_baseline (scale12)';
 
@@ -263,13 +290,15 @@ groupLabels2=cell2mat(groupList2);
 groupLabels3=cell2mat(groupList3);
 groupLabels4=cell2mat(groupList4);
 
-x=[cueHrvTime(:,1) apValues1(:,1) mainGen mainAge mainGroup c01 c02 c03 c04 c05 c06 c07 c08 c09 c10 c11 c12];
-x=[cueHrvTime(:,1) apValues1(:,1) mainGen mainAge c01 c02 c03 c04 c05 c06 c07 c08 c09 c10 c11 c12];
-x=[lppOld(:,1) lppAmpNeuValues(:,1) lppAmpAlcValues(:,1) lppAmpFodValues(:,1) cueHrvTime(:,1) apValues1(:,1) mainGen mainAge c01 c02 c03 c04 c05 c06 c07 c08 c09 c10 c11 c12];
+%x=[cueHrvTime(:,1) apValues1(:,1) mainGen mainAge mainGroup c01 c02 c03 c04 c05 c06 c07 c08 c09 c10 c11 c12];
+%x=[cueHrvTime(:,1) apValues1(:,1) mainGen mainAge c01 c02 c03 c04 c05 c06 c07 c08 c09 c10 c11 c12];
+%x=[lppOld(:,1) lppAmpNeuValues(:,1) lppAmpAlcValues(:,1) lppAmpFodValues(:,1) cueHrvTime(:,1) apValues1(:,1) mainGen mainAge c01 c02 c03 c04 c05 c06 c07 c08 c09 c10 c11 c12];
+x=[creHr creHrv creAp mainGen mainAge c01 c02 c03 c04 c05 c06 c07 c08 c09 c10 c11 c12];
 
-x=[lppAmpNeuValues(:,1) lppAmpAlcValues(:,1) lppAmpFodValues(:,1) cueHrvTime(:,1) apValues1(:,1) mainGen mainAge c01 c02 c03 c04 c05 c06 c07 c08 c09 c10 c11 c12];
-
-XP=[lppAmpNeuValues(:,1) lppAmpAlcValues(:,1) lppAmpFodValues(:,1) cueHrvTime(:,1) apValues1(:,1) mainGen mainAge];
+%x=[lppAmpNeuValues(:,1) lppAmpAlcValues(:,1) lppAmpFodValues(:,1) cueHrvTime(:,1) apValues1(:,1) mainGen mainAge c01 c02 c03 c04 c05 c06 c07 c08 c09 c10 c11 c12];
+%
+XP=x;
+%XP=[lppAmpNeuValues(:,1) lppAmpAlcValues(:,1) lppAmpFodValues(:,1) cueHrvTime(:,1) apValues1(:,1) mainGen mainAge];
 
 %x=[lppAmpNeuValues(:,1) lppAmpAlcValues(:,1) lppAmpFodValues(:,1) cueHrvTime(:,1) apValues1(:,1)];
 
@@ -443,11 +472,11 @@ z36=y36(mainIndex2);
 %x=[lppAmpNeuValues(:,1) lppAmpAlcValues(:,1) lppAmpFodValues(:,1) cueHrvTime(:,1) hrvRest apValues1(:,1) z2 z3 z8 z9 z10 z11 z12 z13 z14 z15 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z35 z36];
 
 
-x=[mainIndex2' lppAmpNeuValues(:,1) lppAmpAlcValues(:,1) lppAmpFodValues(:,1) cueHrvTime(:,1) hrvRest apValues1(:,1) z2 z3 z8 z9 z10 z11 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z36];
+%x=[mainIndex2' lppAmpNeuValues(:,1) lppAmpAlcValues(:,1) lppAmpFodValues(:,1) cueHrvTime(:,1) hrvRest apValues1(:,1) z2 z3 z8 z9 z10 z11 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z36];
 
 
 
-XP=[hrvRest lppAmpNeuValues(:,1) lppAmpAlcValues(:,1) lppAmpFodValues(:,1) cueHrvTime(:,1) apValues1(:,1) mainGen mainAge];
+%XP=[hrvRest lppAmpNeuValues(:,1) lppAmpAlcValues(:,1) lppAmpFodValues(:,1) cueHrvTime(:,1) apValues1(:,1) mainGen mainAge];
 
 
 %x=[lppAmpNeuValues(:,1) lppAmpAlcValues(:,1) lppAmpFodValues(:,1) cueHrvTime(:,1) hrvRest apValues1(:,1) z27 z28 z29 z30];
@@ -455,7 +484,8 @@ XP=[hrvRest lppAmpNeuValues(:,1) lppAmpAlcValues(:,1) lppAmpFodValues(:,1) cueHr
 
 %x=[cueHrvTime(:,1) hrvRest apValues1(:,1) z27 z28 z29 z30];
 
-
+x=[creHr creHrv creAp mainGen mainAge z2 z3 z8 z9 z10 z11 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z36];
+%x=[creHr creHrv creAp];
 % top predictors outside ACES: fam_conflict, fam_management, fam_proreward
 mainData=x;
 
@@ -499,6 +529,10 @@ xval=comparisonTests(data1,labels1,subs,pvalue,fs);
 % adens: u1=27, u2=38, u3=24, u=31, 21; 13, 21, 24, 27, 31, 38
 zz1=z4+z6+z7;
 abc=zz1;
+ab=find(abc>2);
+abc(ab)=2;
+ab=find(isnan(abc));
+abc(ab)=0;
 dz1=find(zz1>1);
 zz1(dz1)=1;
 dz0=find(zz1<0);
@@ -527,13 +561,13 @@ zData=zscore(mainData);
 % [r4,~,~,~]=feature_selection_adenz(mainData,z7,mainData,pvalue);
 % 
 % 
-% csvwrite('tryPrimeData.csv', mainData);
-% csvwrite('tryLabels10.csv', z4);
-% csvwrite('tryLabels20.csv', zz1);
-% csvwrite('tryLabels30.csv', abc);
-
-% csvwrite('tryZData.csv', zData)
-
+% csvwrite('tryPrimeData.csv', prototype_cleanup(mainData));
+% csvwrite('tryLabels10.csv', prototype_cleanup(z4));
+% csvwrite('tryLabels20.csv', prototype_cleanup(zz1));
+% csvwrite('tryLabels30.csv', prototype_cleanup(abc));
+% 
+% csvwrite('tryZData.csv', prototype_cleanup(zData))
+% 
 
 
 
@@ -562,7 +596,7 @@ pvalue=1;
 
 xval=comparisonTests(datam,labelsm,subs,pvalue,fs);
 [scores,acc,f1,phi,itr]=unwrapStruct(xval);
-%csvwrite('tryLabelsAD.csv', mz2);
+% csvwrite('tryLabelsAD.csv', prototype_cleanup(mz2));
 % add GAD. Better as a label than a feature. 
 % mainData(:,38)=mz2;
 % [m3,~,~,~]=feature_selection_adenz(mainData,mz2,mainData,pvalue);
@@ -583,7 +617,8 @@ xval=comparisonTests(d1,l1,subs,pvalue,fs);
 
 
 
-xs=[mainIndex2' lppAmpNeuValues(:,1) lppAmpAlcValues(:,1) lppAmpFodValues(:,1) cueHrvTime(:,1) hrvRest apValues1(:,1) z2 z8 z9 z10 z11 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z36];
+xs=[creHr creHrv creAp mainGen mainAge z2 z8 z9 z10 z11 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z36];
+
 xsLabels=z3;
 sz0=find(xsLabels==2);
 xsLabels(sz0)=0;

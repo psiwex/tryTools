@@ -16,20 +16,20 @@ channelLocationFile = 'C:\Users\John\Documents\MATLAB\eeglab2021.1\plugins\dipfi
 
 x(35,:)=ecg;
 EEG.data=x;
-	EEG = pop_basicfilter(EEG, 1:EEG.nbchan,...
-		'Boundary', 'boundary',...	% Boundary events
-		'Cutoff', [ 0.1 30],...		% High and low cutoff
-		'Design', 'butter',...		% IIR Butterworth filter
-		'Filter', 'bandpass',...	% Bandpass filter type
-		'Order',  2,...				% Filter order
-		'RemoveDC', 'on' );			% Remove DC offset
-EEG = pop_chanedit(EEG, 'lookup',channelLocationFile);
-    EEG = pop_clean_rawdata(EEG,...
-        'FlatlineCriterion', 5,...      % Maximum tolerated flatline duration in seconds (Default: 5)
-        'ChannelCriterion', 0.85,...    % Minimum channel correlation with neighboring channels (default: 0.85)
-        'LineNoiseCriterion', 4,...     % Maximum line noise relative to signal in standard deviations (default: 4)
-        'Highpass','off','BurstCriterion','off','WindowCriterion','off','BurstRejection','off','Distance','Euclidian');
- EEG = pop_interp(EEG, EEG.chanlocs, 'spherical');
+% 	EEG = pop_basicfilter(EEG, 1:EEG.nbchan,...
+% 		'Boundary', 'boundary',...	% Boundary events
+% 		'Cutoff', [ 0.1 30],...		% High and low cutoff
+% 		'Design', 'butter',...		% IIR Butterworth filter
+% 		'Filter', 'bandpass',...	% Bandpass filter type
+% 		'Order',  2,...				% Filter order
+% 		'RemoveDC', 'on' );			% Remove DC offset
+% EEG = pop_chanedit(EEG, 'lookup',channelLocationFile);
+%     EEG = pop_clean_rawdata(EEG,...
+%         'FlatlineCriterion', 5,...      % Maximum tolerated flatline duration in seconds (Default: 5)
+%         'ChannelCriterion', 0.85,...    % Minimum channel correlation with neighboring channels (default: 0.85)
+%         'LineNoiseCriterion', 4,...     % Maximum line noise relative to signal in standard deviations (default: 4)
+%         'Highpass','off','BurstCriterion','off','WindowCriterion','off','BurstRejection','off','Distance','Euclidian');
+%  EEG = pop_interp(EEG, EEG.chanlocs, 'spherical');
 figureDir='.';
 params = struct();
 params.figureVisibility = 'off';

@@ -98,7 +98,7 @@ list= dir([homeDir '\TRY*']);
 T = struct2table(list);
 subNames=table2cell(T(:,1));
 
-ki=2;
+ki=1;
 subNum='TRY001';
 mki=1;
 
@@ -111,7 +111,7 @@ lppCue={};
 
 
 
-for ki=2:length(subNames)
+for ki=1:length(subNames)
 subNum=subNames{ki};
 
 %% derive values
@@ -139,10 +139,10 @@ try
 
 %% preproc
 %rest
-EEG = pop_biosig(ffName1);
+EEG = pop_biosig(efName1);
 [EEG,params] = tryPreproc(EEG);
 [ekgPeaks, params] = eeg_beats(EEG, params);
-[EEG,ERP,erns] = cuePreproc(ffName1,raw_dataset_savepath,ongoing_dataset_savepath,erpset_savepath,binlister_loadpath,channelLocationFile);
+[EEG,ERP,erns] = cuePreproc(efName1,raw_dataset_savepath,ongoing_dataset_savepath,erpset_savepath,binlister_loadpath,channelLocationFile);
 [bpm1, hr1, meanRR1, stdRR1, alphaPower1, alphaStd1,hrv1,hrvStd1] = calcBpm(EEG,ekgPeaks,eegChan);
 
 hr=[meanRR1];
