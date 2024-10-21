@@ -355,7 +355,7 @@ subs=2;
 %% loading megalith project
 
 
-megalith1 = readtable('megaLith1.xlsx');
+megalith1 = readtable('megaLith2.xlsx');
 x1=table2cell(megalith1(:,1));
 x2=table2cell(megalith1(:,2));
 x3=table2cell(megalith1(:,3));
@@ -392,6 +392,8 @@ x33=table2cell(megalith1(:,33));
 x34=table2cell(megalith1(:,34));
 x35=table2cell(megalith1(:,35));
 x36=table2cell(megalith1(:,36));
+xyz1=table2cell(megalith1(:,:));
+
 
 y1=cell2mat(x1);
 y2=cell2mat(x2);
@@ -429,6 +431,7 @@ y33=cell2mat(x33);
 y34=cell2mat(x34);
 y35=cell2mat(x35);
 y36=cell2mat(x36);
+yyz1=cell2mat(xyz1(:,39:242));
 
 %% convert to proper index
 z1=y1(mainIndex2);
@@ -467,6 +470,7 @@ z33=y33(mainIndex2);
 z34=y34(mainIndex2);
 z35=y35(mainIndex2);
 z36=y36(mainIndex2);
+zyz1=yyz1(mainIndex2,:);
 
 % newMain
 %x=[lppAmpNeuValues(:,1) lppAmpAlcValues(:,1) lppAmpFodValues(:,1) cueHrvTime(:,1) hrvRest apValues1(:,1) z2 z3 z8 z9 z10 z11 z12 z13 z14 z15 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z35 z36];
@@ -484,7 +488,22 @@ z36=y36(mainIndex2);
 
 %x=[cueHrvTime(:,1) hrvRest apValues1(:,1) z27 z28 z29 z30];
 
-x=[creHr creHrv creAp mainGen mainAge z2 z3 z8 z9 z10 z11 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z36];
+%x=[creHr creHrv creAp mainGen mainAge 
+    %z2 z3 z8 z9 z10 
+    % z11 z12 z13 z14 z15 
+    % z16 z17 z18 z19 z20 
+    % z21 z22 z23 z24 z25 
+    % z26 z27 z28 z29 z30 
+    % z31 z32 z33 z34 z36 
+    % zyz1];
+
+
+
+x=[creHr creHrv creAp mainGen mainAge z2 z3 z8 z9 z10 z11 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z36 zyz1];
+
+%x=zyz1;
+% 69, 111, 51, 123
+
 %x=[creHr creHrv creAp];
 % top predictors outside ACES: fam_conflict, fam_management, fam_proreward
 mainData=x;
@@ -507,6 +526,11 @@ mainData=x;
 [mean_measures1,mean_phi1,mean_phiclassic1,mean_aucroc1,mean_accuracy1,mean_sensitivity1,mean_specificity1,mean_acc21,mean_ppv1,mean_npv1,mean_f1]=lda_aden_mval(subs,data1,labels1,pvalue);
 [mean_measures2,mean_phi2,mean_phiclassic2,mean_aucroc2,mean_accuracy2,mean_sensitivity2,mean_specificity2,mean_acc22,mean_ppv2,mean_npv2,mean_f12]=lda_aden_mval(subs,data2,labels2,pvalue);
 [mean_measures3,mean_phi3,mean_phiclassic3,mean_aucroc3,mean_accuracy3,mean_sensitivity3,mean_specificity3,mean_acc23,mean_ppv3,mean_npv3,mean_f13]=lda_aden_mval(subs,data3,labels3,pvalue);
+
+% 20, 12, 16, 158
+% 69, 111, 51, 123
+
+% 69, 111, 51, 123
 
 % outs=[z_phi1 z_phi2 z_phi3 z_phi4 mean_phi1 mean_phi2 mean_phi3 0];
 % outacc=[z_accuracy1 z_accuracy2 z_accuracy3 z_accuracy4 mean_accuracy1 mean_accuracy2 mean_accuracy3 0];
@@ -561,13 +585,13 @@ zData=zscore(mainData);
 % [r4,~,~,~]=feature_selection_adenz(mainData,z7,mainData,pvalue);
 % 
 % 
-% csvwrite('tryPrimeData.csv', prototype_cleanup(mainData));
-% csvwrite('tryLabels10.csv', prototype_cleanup(z4));
-% csvwrite('tryLabels20.csv', prototype_cleanup(zz1));
-% csvwrite('tryLabels30.csv', prototype_cleanup(abc));
-% 
-% csvwrite('tryZData.csv', prototype_cleanup(zData))
-% 
+% csvwrite('tryAiPrimeData.csv', prototype_cleanup(mainData));
+% csvwrite('tryAiLabels10.csv', prototype_cleanup(z4));
+% csvwrite('tryAiLabels20.csv', prototype_cleanup(zz1));
+% csvwrite('tryAiLabels30.csv', prototype_cleanup(abc));
+% % 
+% csvwrite('tryAiZData.csv', prototype_cleanup(zData))
+% % 
 
 
 
@@ -596,7 +620,7 @@ pvalue=1;
 
 xval=comparisonTests(datam,labelsm,subs,pvalue,fs);
 [scores,acc,f1,phi,itr]=unwrapStruct(xval);
-% csvwrite('tryLabelsAD.csv', prototype_cleanup(mz2));
+% csvwrite('tryAiLabelsAD.csv', prototype_cleanup(mz2));
 % add GAD. Better as a label than a feature. 
 % mainData(:,38)=mz2;
 % [m3,~,~,~]=feature_selection_adenz(mainData,mz2,mainData,pvalue);
@@ -649,12 +673,12 @@ xval=comparisonTests(xd1,xl1,subs,pvalue,fs);
 [sd1,~,~,~]=feature_selection_adenz(xs1,xsLab1,xs1,pvalue);
 
 % gender 2 tests
-[xd2,xl2]=tryFormat(xs2,xsLab2);
-[xd2,xl2]=classBalance(xd2,xl2,subs);
+% [xd2,xl2]=tryFormat(xs2,xsLab2);
+% [xd2,xl2]=classBalance(xd2,xl2,subs);
 %[m_measures0,m_phi0,m_phiclassic0,m_aucroc0,m_accuracy0,m_sensitivity0,m_specificity0,m_acc20,m_ppv0,m_npv0,m_f10]=lda_adenz_mval(subs,d1,l1,pvalue);
-xval=comparisonTests(xd2,xl2,subs,pvalue,fs);
-[scores,x2acc,x2f1,x2phi,x2itr]=unwrapStruct(xval);
-[sd2,~,~,~]=feature_selection_adenz(xs2,xsLab2,xs2,pvalue);
+% xval=comparisonTests(xd2,xl2,subs,pvalue,fs);
+% [scores,x2acc,x2f1,x2phi,x2itr]=unwrapStruct(xval);
+% [sd2,~,~,~]=feature_selection_adenz(xs2,xsLab2,xs2,pvalue);
 % Just an update on AI classification of GAD.
 % 
 % Without the psychosocial metrics, the top feature is age.
@@ -669,3 +693,6 @@ xval=comparisonTests(xd2,xl2,subs,pvalue,fs);
 % When running analysis between male and female, the two top features were sub_parent_environment and fam_manage.
 % 
 % We can separate a patient with a pathology (trauma, PTSD) away from baseline ones easily enough (75% acc). Not much difference between specific subs in terms of 'easier to automatically classify.'
+
+
+% TEPS-C, Sub_phys_enviornment, Sub_overall, bin1_Neutral_Trial__P4_A_400-1000
