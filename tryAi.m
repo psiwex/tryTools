@@ -1,7 +1,8 @@
 %https://www.mathworks.com/help/stats/repeatedmeasuresmodel.ranova.html
 tic;
+% new cats: AUD/SUD. 0: no disorder, 1: AUD/SUD
 
-
+load('sud.mat','sud')
 %new categories
 %-0: no trauma
 %-1: trauma but no PTSD
@@ -394,6 +395,8 @@ x35=table2cell(megalith1(:,35));
 x36=table2cell(megalith1(:,36));
 xyz1=table2cell(megalith1(:,:));
 
+megalith3 = readtable('megaLith3.xlsx');
+sud1=table2cell(megalith3(:,2));
 
 y1=cell2mat(x1);
 y2=cell2mat(x2);
@@ -432,6 +435,7 @@ y34=cell2mat(x34);
 y35=cell2mat(x35);
 y36=cell2mat(x36);
 yyz1=cell2mat(xyz1(:,39:242));
+sud2=cell2mat(sud1);
 
 %% convert to proper index
 z1=y1(mainIndex2);
@@ -472,6 +476,8 @@ z35=y35(mainIndex2);
 z36=y36(mainIndex2);
 zyz1=yyz1(mainIndex2,:);
 
+suds1=sud2(mainIndex2);
+
 % newMain
 %x=[lppAmpNeuValues(:,1) lppAmpAlcValues(:,1) lppAmpFodValues(:,1) cueHrvTime(:,1) hrvRest apValues1(:,1) z2 z3 z8 z9 z10 z11 z12 z13 z14 z15 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z35 z36];
 
@@ -498,8 +504,19 @@ zyz1=yyz1(mainIndex2,:);
     % zyz1];
 
 
+% [ 3  6 11 14 15 16 17 18 19 25 27 98]
+% [11 19 27 98]
+
+% alpha power, z2, z11, z14, z15, z16, z17, z18, z19, 98-35=63/64
+% alpha power, age/z2, audit/z11, teps-c/z14, sub_monitor/z15, 
+% sub_predictability/z16, sub_parent_environment/z17, Sub_phys_enviornment/z18, 
+% Sub_safety/z19, 98-35=63/bin2_Food_Trial_F8_A_1000-2488
 
 x=[creHr creHrv creAp mainGen mainAge z2 z3 z8 z9 z10 z11 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z36 zyz1];
+
+%x=[creHr creHrv creAp mainGen mainAge zyz1];
+%x=[creHr creHrv creAp mainGen mainAge z27 z28 z29 z30 zyz1];
+
 
 %x=zyz1;
 % 69, 111, 51, 123
@@ -512,16 +529,19 @@ mainData=x;
 [data2,labels2]=tryFormat(mainData,z5);
 [data3,labels3]=tryFormat(mainData,z6);
 [data4,labels4]=tryFormat(mainData,z7);
+[data5,labels5]=tryFormat(mainData,suds1);
 
 [data1,labels1]=classBalance(data1,labels1,subs);
 [data2,labels2]=classBalance(data2,labels2,subs);
 [data3,labels3]=classBalance(data3,labels3,subs);
 [data4,labels4]=classBalance(data4,labels4,subs);
+[data5,labels5]=classBalance(data5,labels5,subs);
 
 [z_measures1,z_phi1,z_phiclassic1,z_aucroc1,z_accuracy1,z_sensitivity1,z_specificity1,z_acc21,z_ppv1,z_npv1,z_f1]=lda_adenz_mval(subs,data1,labels1,pvalue);
 [z_measures2,z_phi2,z_phiclassic2,z_aucroc2,z_accuracy2,z_sensitivity2,z_specificity2,z_acc22,z_ppv2,z_npv2,z_f12]=lda_adenz_mval(subs,data2,labels2,pvalue);
 [z_measures3,z_phi3,z_phiclassic3,z_aucroc3,z_accuracy3,z_sensitivity3,z_specificity3,z_acc23,z_ppv3,z_npv3,z_f13]=lda_adenz_mval(subs,data3,labels3,pvalue);
 [z_measures4,z_phi4,z_phiclassic4,z_aucroc4,z_accuracy4,z_sensitivity4,z_specificity4,z_acc24,z_ppv4,z_npv4,z_f14]=lda_adenz_mval(subs,data4,labels4,pvalue);
+[z_measures5,z_phi5,z_phiclassic5,z_aucroc5,z_accuracy5,z_sensitivity5,z_specificity5,z_acc25,z_ppv5,z_npv5,z_f15]=lda_adenz_mval(subs,data5,labels5,pvalue);
 
 [mean_measures1,mean_phi1,mean_phiclassic1,mean_aucroc1,mean_accuracy1,mean_sensitivity1,mean_specificity1,mean_acc21,mean_ppv1,mean_npv1,mean_f1]=lda_aden_mval(subs,data1,labels1,pvalue);
 [mean_measures2,mean_phi2,mean_phiclassic2,mean_aucroc2,mean_accuracy2,mean_sensitivity2,mean_specificity2,mean_acc22,mean_ppv2,mean_npv2,mean_f12]=lda_aden_mval(subs,data2,labels2,pvalue);
@@ -537,6 +557,8 @@ mainData=x;
 % outf1=[z_f1 z_f12 z_f13 z_f14 mean_f1 mean_f12 mean_f13 0]
 % try
 [mean_measures4,mean_phi4,mean_phiclassic4,mean_aucroc4,mean_accuracy4,mean_sensitivity4,mean_specificity4,mean_acc24,mean_ppv4,mean_npv4,mean_f14]=lda_aden_mval(subs,data4,labels4,pvalue);
+[mean_measures5,mean_phi5,mean_phiclassic5,mean_aucroc5,mean_accuracy5,mean_sensitivity5,mean_specificity5,mean_acc25,mean_ppv5,mean_npv5,mean_f15]=lda_aden_mval(subs,data5,labels5,pvalue);
+
 
 zouts=[z_phi1 z_phi2 z_phi3 z_phi4 mean_phi1 mean_phi2 mean_phi3 mean_phi4];
 zoutf1=[z_f1 z_f12 z_f13 z_f14 mean_f1 mean_f12 mean_f13 mean_f14]
@@ -577,20 +599,21 @@ xval=comparisonTests(data0,labels0,subs,pvalue,fs);
 [r2,~,~,~]=feature_selection_adenz(mainData,zz1,mainData,pvalue);
 
 zData=zscore(mainData);
-
+%csvwrite('tryAiSudLabels.csv', prototype_cleanup(suds1));
 %compare level 0 vs level 1
 [r1,~,~,~]=feature_selection_adenz(mainData,z4,mainData,pvalue);
+[r11,~,~,~]=feature_selection_adenz(mainData,suds1,mainData,pvalue);
 % [r2,~,~,~]=feature_selection_adenz(mainData,z5,mainData,pvalue);
 % [r3,~,~,~]=feature_selection_adenz(mainData,z6,mainData,pvalue);
 % [r4,~,~,~]=feature_selection_adenz(mainData,z7,mainData,pvalue);
 % 
 % 
-% csvwrite('tryAiPrimeData.csv', prototype_cleanup(mainData));
-% csvwrite('tryAiLabels10.csv', prototype_cleanup(z4));
-% csvwrite('tryAiLabels20.csv', prototype_cleanup(zz1));
-% csvwrite('tryAiLabels30.csv', prototype_cleanup(abc));
+% csvwrite('tryPhaiPrimeData.csv', prototype_cleanup(mainData));
+% csvwrite('tryPhaiLabels10.csv', prototype_cleanup(z4));
+% csvwrite('tryPhaiLabels20.csv', prototype_cleanup(zz1));
+% csvwrite('tryPhaiLabels30.csv', prototype_cleanup(abc));
 % % 
-% csvwrite('tryAiZData.csv', prototype_cleanup(zData))
+% csvwrite('tryPhaiZData.csv', prototype_cleanup(zData))
 % % 
 
 
@@ -694,5 +717,51 @@ xval=comparisonTests(xd1,xl1,subs,pvalue,fs);
 % 
 % We can separate a patient with a pathology (trauma, PTSD) away from baseline ones easily enough (75% acc). Not much difference between specific subs in terms of 'easier to automatically classify.'
 
+% [ 3  6 11 14 15 16 17 18 19 25]
 
 % TEPS-C, Sub_phys_enviornment, Sub_overall, bin1_Neutral_Trial__P4_A_400-1000
+
+%34!-neu, fod, alc
+lppShort1=zyz1(:,1:34);
+lppShort2=zyz1(:,35:68);
+lppShort3=zyz1(:,69:102);
+
+
+lppLong1=zyz1(:,103:136);
+lppLong2=zyz1(:,137:170);
+lppLong3=zyz1(:,171:204);
+
+lppNeuShort=mean(prototype_cleanup(lppShort1));
+lppNeuLong=mean(prototype_cleanup(lppLong1));
+
+lppFodShort=mean(prototype_cleanup(lppShort2));
+lppFodLong=mean(prototype_cleanup(lppLong2));
+
+lppAlcShort=mean(prototype_cleanup(lppShort3));
+lppAlcLong=mean(prototype_cleanup(lppLong3));
+
+lppNeuShortMax=find(lppNeuShort==max(abs(lppNeuShort)));
+% 15-O1
+lppFodShortMax=find(lppFodShort==max(abs(lppFodShort)));
+% 20-P8
+lppAlcShortMax=find(lppAlcShort==max(abs(lppAlcShort)));
+% 18-PO4
+
+lppNeuLongMax=find((lppNeuLong)==max((lppNeuLong)));
+% 17-O2
+lppFodLongMax=find((lppFodLong)==max((lppFodLong)));
+% 20-P8
+lppAlcLongMax=find((lppAlcLong)==max((lppAlcLong)));
+% 20-P8
+
+lppNeuLongMax=find(abs(lppNeuLong)==max(abs(lppNeuLong)));
+% 1
+lppFodLongMax=find(abs(lppFodLong)==max(abs(lppFodLong)));
+% 1
+lppAlcLongMax=find(abs(lppAlcLong)==max(abs(lppAlcLong)));
+% 1
+
+
+
+
+
