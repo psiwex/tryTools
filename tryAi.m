@@ -571,6 +571,7 @@ xval=comparisonTests(data1,labels1,subs,pvalue,fs);
 [u3,~,~,~]=feature_selection_adenz(data3{1}',labels3{1},data3{1}',pvalue);
 [u4,~,~,~]=feature_selection_adenz(data4{1}',labels4{1},data4{1}',pvalue);
 
+
 %z4, z6, z7
 % adens: u1=27, u2=38, u3=24, u=31, 21; 13, 21, 24, 27, 31, 38
 zz1=z4+z6+z7;
@@ -721,6 +722,9 @@ xval=comparisonTests(xd1,xl1,subs,pvalue,fs);
 
 % TEPS-C, Sub_phys_enviornment, Sub_overall, bin1_Neutral_Trial__P4_A_400-1000
 
+audy=find(suds1==1);
+audn=find(suds1==0);
+
 %34!-neu, fod, alc
 lppShort1=zyz1(:,1:34);
 lppShort2=zyz1(:,35:68);
@@ -739,6 +743,48 @@ lppFodLong=mean(prototype_cleanup(lppLong2));
 
 lppAlcShort=mean(prototype_cleanup(lppShort3));
 lppAlcLong=mean(prototype_cleanup(lppLong3));
+
+
+% drug/aud patients
+lppNeuAudShort=mean(prototype_cleanup(lppShort1(audy,:)));
+lppNeuAudLong=mean(prototype_cleanup(lppLong1(audy,:)));
+
+lppFodAudShort=mean(prototype_cleanup(lppShort2(audy,:)));
+lppFodAudLong=mean(prototype_cleanup(lppLong2(audy,:)));
+
+lppAlcAudShort=mean(prototype_cleanup(lppShort3(audy,:)));
+lppAlcAudLong=mean(prototype_cleanup(lppLong3(audy,:)));
+
+% fod aud
+lppFodShortAud=lppFodAudShort-lppNeuAudShort;
+lppFodLongAud=lppFodAudLong-lppNeuAudLong;
+
+% alc aud
+lppAlcShortAud=lppAlcAudShort-lppNeuAudShort;
+lppAlcLongAud=lppAlcAudLong-lppNeuAudLong;
+
+
+% no drug/aud patients
+lppNeuConShort=mean(prototype_cleanup(lppShort1(audn,:)));
+lppNeuConLong=mean(prototype_cleanup(lppLong1(audn,:)));
+
+lppFodConShort=mean(prototype_cleanup(lppShort2(audn,:)));
+lppFodConLong=mean(prototype_cleanup(lppLong2(audn,:)));
+
+lppAlcConShort=mean(prototype_cleanup(lppShort3(audn,:)));
+lppAlcConLong=mean(prototype_cleanup(lppLong3(audn,:)));
+
+% fod aud
+lppFodShortCon=lppFodAudShort-lppNeuAudShort;
+lppFodLongCon=lppFodAudLong-lppNeuAudLong;
+
+% alc aud
+lppAlcShortCon=lppAlcAudShort-lppNeuAudShort;
+lppAlcLongCon=lppAlcAudLong-lppNeuAudLong;
+
+
+%% others
+
 
 lppNeuShortMax=find(lppNeuShort==max(abs(lppNeuShort)));
 % 15-O1
@@ -762,6 +808,82 @@ lppAlcLongMax=find(abs(lppAlcLong)==max(abs(lppAlcLong)));
 % 1
 
 
+[m1,~,~,~]=feature_selection_adenz(zData,suds1,zData,pvalue);
 
 
+%% aud contrasts
+audShortAlc=lppAlcAudShort-lppAlcConShort;
+audLongAlc=lppAlcAudLong-lppAlcConLong;
 
+audShortFod=lppFodAudShort-lppFodConShort;
+audLongFod=lppFodAudLong-lppFodConLong;
+
+lppAlcShortMax=find((audShortAlc)==max(max((audShortAlc))));
+% 11-audit
+lppAlcLongMax=find((audLongAlc)==max(max((audLongAlc))));
+% 22-fam_conflict
+
+lppFodShortMax=find((audShortFod)==max(max((audShortFod))));
+% 3-alpha power
+lppFodLongMax=find((audLongFod)==max(max((audLongFod))));
+% 32-SuicideAttempt
+
+%x=[creHr creHrv creAp mainGen mainAge 
+    %z2 z3 z8 z9 z10 
+    % z11 z12 z13 z14 z15 
+    % z16 z17 z18 z19 z20 
+    % z21 z22 z23 z24 z25 
+    % z26 z27 z28 z29 z30 
+    % z31 z32 z33 z34 z36 
+    % zyz1];
+
+tryDif = readtable('tryDiff.xlsx');
+tryDiffs=table2cell(tryDif);
+
+tried=cell2mat(tryDiffs(:,2:113));
+tryCon=prototype_cleanup(tried);
+
+tryDifCon=tryCon(mainIndex2,:);
+
+tryDifAlc=tryDifCon(:,1:56);
+tryDifFod=tryDifCon(:,57:112);
+
+tryDifAlc1=tryDifAlc(:,1:14);
+tryDifAlc2=tryDifAlc(:,15:28);
+tryDifAlc3=tryDifAlc(:,29:42);
+tryDifAlc4=tryDifAlc(:,43:56);
+
+tryDifFod1=tryDifFod(:,1:14);
+tryDifFod2=tryDifFod(:,15:28);
+tryDifFod3=tryDifFod(:,29:42);
+tryDifFod4=tryDifFod(:,43:56);
+
+tryAlcA=tryDifAlc2-tryDifAlc1;
+tryAlcB=tryDifAlc4-tryDifAlc3;
+
+tryFodA=tryDifFod2-tryDifFod1;
+tryFodB=tryDifFod4-tryDifFod3;
+
+x=[creHr creHrv creAp mainGen mainAge z2 z3 z8 z9 z10 z11 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z36 tryAlcA tryAlcB tryFodA tryFodB tryDifCon zyz1];
+
+%x=[creHr creHrv creAp mainGen mainAge 
+% z2 z3 z8 z9 z10 
+% z11 z12 z13 z14 z15 
+% z16 z17 z18 z19 z20 
+% z21 z22 z23 z24 z25 
+% z26 z27 z28 z29 z30 
+% z31 z32 z33 z34 z36 
+% tryAlcA tryAlcB tryFodA tryFodB 
+% tryDifCon zyz1];
+
+xZero=zscore(x);
+[s0,~,~,~]=feature_selection_adenz(xZero,suds1,xZero,pvalue);
+[s1,~,~,~]=feature_selection_aden(xZero,suds1,xZero,pvalue);
+
+%csvwrite('tryLppDifBase.csv', prototype_cleanup(x));
+%csvwrite('tryLppDif.csv', prototype_cleanup(xZero));
+[xd1,xl1]=tryFormat(xZero,suds1);
+[xd1,xl1]=classBalance(xd1,xl1,subs);
+%[m_measures0,m_phi0,m_phiclassic0,m_aucroc0,m_accuracy0,m_sensitivity0,m_specificity0,m_acc20,m_ppv0,m_npv0,m_f10]=lda_adenz_mval(subs,d1,l1,pvalue);
+xval=comparisonTests(xd1,xl1,subs,pvalue,fs);
+[scores,x1acc,x1f1,x1phi,x1itr]=unwrapStruct(xval);
