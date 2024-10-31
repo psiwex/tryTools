@@ -40,10 +40,10 @@ featureNumber=int(3)
 #2nd best: N=5, features=3
 from numpy import genfromtxt
 
-X0 = genfromtxt('tryLppDifBase.csv', delimiter=',')
+X0 = genfromtxt('trySudLpp.csv', delimiter=',')
 #X=stats.zscore(X0)
-X = genfromtxt('tryLppDif.csv', delimiter=',')
-X=stats.zscore(X)
+X = genfromtxt('trySudZLpp.csv', delimiter=',')
+#X=stats.zscore(X)
 
 y1 = genfromtxt('tryPhaiLabels10.csv', delimiter=',')
 y2 = genfromtxt('tryPhaiLabels20.csv', delimiter=',')

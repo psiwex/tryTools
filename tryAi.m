@@ -514,6 +514,9 @@ suds1=sud2(mainIndex2);
 
 x=[creHr creHrv creAp mainGen mainAge z2 z3 z8 z9 z10 z11 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z36 zyz1];
 
+
+x=[creHr creHrv creAp mainGen mainAge z2 z3 z8 z9 z10 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z36 zyz1];
+
 %x=[creHr creHrv creAp mainGen mainAge zyz1];
 %x=[creHr creHrv creAp mainGen mainAge z27 z28 z29 z30 zyz1];
 
@@ -600,7 +603,7 @@ xval=comparisonTests(data0,labels0,subs,pvalue,fs);
 [r2,~,~,~]=feature_selection_adenz(mainData,zz1,mainData,pvalue);
 
 zData=zscore(mainData);
-%csvwrite('tryAiSudLabels.csv', prototype_cleanup(suds1));
+%csvwrite('trySudLabels.csv', prototype_cleanup(suds1));
 %compare level 0 vs level 1
 [r1,~,~,~]=feature_selection_adenz(mainData,z4,mainData,pvalue);
 [r11,~,~,~]=feature_selection_adenz(mainData,suds1,mainData,pvalue);
@@ -609,12 +612,12 @@ zData=zscore(mainData);
 % [r4,~,~,~]=feature_selection_adenz(mainData,z7,mainData,pvalue);
 % 
 % 
-% csvwrite('tryPhaiPrimeData.csv', prototype_cleanup(mainData));
+% csvwrite('trySudData.csv', prototype_cleanup(mainData));
 % csvwrite('tryPhaiLabels10.csv', prototype_cleanup(z4));
 % csvwrite('tryPhaiLabels20.csv', prototype_cleanup(zz1));
 % csvwrite('tryPhaiLabels30.csv', prototype_cleanup(abc));
 % % 
-% csvwrite('tryPhaiZData.csv', prototype_cleanup(zData))
+% csvwrite('trySudZData.csv', prototype_cleanup(zData))
 % % 
 
 
@@ -666,6 +669,9 @@ xval=comparisonTests(d1,l1,subs,pvalue,fs);
 
 
 xs=[creHr creHrv creAp mainGen mainAge z2 z8 z9 z10 z11 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z36];
+
+xs=[creHr creHrv creAp mainGen mainAge z2 z8 z9 z10 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z36];
+
 
 xsLabels=z3;
 sz0=find(xsLabels==2);
@@ -866,24 +872,40 @@ tryFodB=tryDifFod4-tryDifFod3;
 
 x=[creHr creHrv creAp mainGen mainAge z2 z3 z8 z9 z10 z11 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z36 tryAlcA tryAlcB tryFodA tryFodB tryDifCon zyz1];
 
+x=[creHr creHrv creAp mainGen mainAge z2 z3 z8 z9 z10 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z36 tryAlcA tryAlcB tryFodA tryFodB tryDifCon zyz1];
+
+
 %x=[creHr creHrv creAp mainGen mainAge 
 % z2 z3 z8 z9 z10 
-% z11 z12 z13 z14 z15 
-% z16 z17 z18 z19 z20 
-% z21 z22 z23 z24 z25 
-% z26 z27 z28 z29 z30 
-% z31 z32 z33 z34 z36 
-% tryAlcA tryAlcB tryFodA tryFodB 
+% z12 z13 z14 z15 z16
+% z17 z18 z19 z20 z21
+% z22 z23 z24 z25 z26
+% z27 z28 z29 z30 z31
+% z32 z33 z34 z36 tryAlcA
+% tryAlcB tryFodA tryFodB tryDifCon
 % tryDifCon zyz1];
 
 xZero=zscore(x);
 [s0,~,~,~]=feature_selection_adenz(xZero,suds1,xZero,pvalue);
 [s1,~,~,~]=feature_selection_aden(xZero,suds1,xZero,pvalue);
 
+%csvwrite('trySudLpp.csv', prototype_cleanup(x));
+%csvwrite('trySudZLpp.csv', prototype_cleanup(xZero));
+[xd2,xl2]=tryFormat(xZero,suds1);
+[xd2,xl2]=classBalance(xd2,xl2,subs);
+%[m_measures0,m_phi0,m_phiclassic0,m_aucroc0,m_accuracy0,m_sensitivity0,m_specificity0,m_acc20,m_ppv0,m_npv0,m_f10]=lda_adenz_mval(subs,d1,l1,pvalue);
+xval=comparisonTests(xd2,xl2,subs,pvalue,fs);
+[scores2,x2acc,x2f1,x2phi,x2itr]=unwrapStruct(xval);
+
+
+[s2,~,~,~]=feature_selection_adenz(x,suds1,x,pvalue);
+[s3,~,~,~]=feature_selection_aden(x,suds1,x,pvalue);
+
 %csvwrite('tryLppDifBase.csv', prototype_cleanup(x));
 %csvwrite('tryLppDif.csv', prototype_cleanup(xZero));
-[xd1,xl1]=tryFormat(xZero,suds1);
-[xd1,xl1]=classBalance(xd1,xl1,subs);
+[xd3,xl3]=tryFormat(x,suds1);
+[xd3,xl3]=classBalance(xd3,xl3,subs);
 %[m_measures0,m_phi0,m_phiclassic0,m_aucroc0,m_accuracy0,m_sensitivity0,m_specificity0,m_acc20,m_ppv0,m_npv0,m_f10]=lda_adenz_mval(subs,d1,l1,pvalue);
-xval=comparisonTests(xd1,xl1,subs,pvalue,fs);
-[scores,x1acc,x1f1,x1phi,x1itr]=unwrapStruct(xval);
+xval=comparisonTests(xd3,xl3,subs,pvalue,fs);
+[scores3,x3acc,x3f1,x3phi,x3itr]=unwrapStruct(xval);
+
