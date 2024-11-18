@@ -46,29 +46,38 @@ ageList=table2cell(T1(:,2));
 genderList=table2cell(T1(:,3));
 groupList=table2cell(T1(:,6));
 
+
+table1 = readtable('volume_rh.csv');
+nameList0=table2cell(table1(:,1));
+[mainIndex,mainDex]=tableIndexer(subNames,nameList0);
+nameList=nameList(mainIndex);
+
+
 leng=length(ageList);
-subInd=1;
-mainDex={};
-mainIndex=[];
+%[mainIndex,mainDex]=tableIndexer(subNames,nameList);
 
-for ki=1:length(subNames)
-subNum=subNames{ki};
-
-
-if any(strcmp(nameList,subNum))
-% Do Something
-mainDex{subInd}=subNum;
-
-mainIndex(ki)=find(strcmp(nameList,subNum));
-subInd=subInd+1;
-
-else
-% Do Something else
-
-end
-
-end
-
+% subInd=1;
+% mainDex={};
+% mainIndex=[];
+% 
+% for ki=1:length(subNames)
+% subNum=subNames{ki};
+% 
+% 
+% if any(strcmp(nameList,subNum))
+% % Do Something
+% mainDex{subInd}=subNum;
+% 
+% mainIndex(ki)=find(strcmp(nameList,subNum));
+% subInd=subInd+1;
+% 
+% else
+% % Do Something else
+% 
+% end
+% 
+% end
+% 
 
 % vector for gender, age, exp/control group
 mainGen=cell2mat(genderList);
@@ -200,31 +209,33 @@ col12=cleanZero(cell2mat(col12));
 % [x1,~]=size(T2);
 % offSets=abs(x1-x0)+1;
 % mainIndex2=mainIndex-offSets;
+mainIndex2=mainIndex;
+mainDex2=mainDex;
 
-nameList=table2cell(T2(:,1));
-nameList=subNames;
-subInd=1;
-mainDex2={};
-mainIndex2=[];
-
-for ki=1:length(subNames)
-subNum=subNames{ki};
-
-
-if any(strcmp(nameList,subNum))
-% Do Something
-mainDex2{subInd}=subNum;
-
-mainIndex2(ki)=find(strcmp(nameList,subNum));
-subInd=subInd+1;
-
-else
-% Do Something else
-
-end
-
-end
-
+% nameList=table2cell(T2(:,1));
+% nameList=subNames;
+% subInd=1;
+% mainDex2={};
+% mainIndex2=[];
+% 
+% for ki=1:length(subNames)
+% subNum=subNames{ki};
+% 
+% 
+% if any(strcmp(nameList,subNum))
+% % Do Something
+% mainDex2{subInd}=subNum;
+% 
+% mainIndex2(ki)=find(strcmp(nameList,subNum));
+% subInd=subInd+1;
+% 
+% else
+% % Do Something else
+% 
+% end
+% 
+% end
+% [mainIndex2,mainDex2]=tableIndexer(subNames,nameList);
 %hrvRest1=hrvRest(mainIndex2);
 % call index
 mainAge=mage2(mainIndex2);
@@ -269,9 +280,9 @@ cd12=[c12; c12];
 % rm.Coefficients
 
 
-creHr=reHr;
-creHrv=reHrv;
-creAp=reAp;
+creHr=reHr(mainIndex);
+creHrv=reHrv(mainIndex);
+creAp=reAp(mainIndex);
 
 
 scales='ius_total_baseline	ius_total_baseline_child_scale	bdi_total_baseline	bai_total_baseline	audit_total_baseline	dmqr_social_baseline	dmqr_cope_anxiety_baseline	dmqr_cope_depression_baseline	dmqr_enhancement_baseline	dmqr_conformity_baseline	pcl_total_baseline	subscore_fav_druguse_baseline';
@@ -516,6 +527,8 @@ x=[creHr creHrv creAp mainGen mainAge z2 z3 z8 z9 z10 z11 z12 z13 z14 z15 z16 z1
 
 
 x=[creHr creHrv creAp mainGen mainAge z2 z3 z8 z9 z10 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z36 zyz1];
+
+x=[creHr creHrv creAp mainGen mainAge z2 z3 z8 z9 z10 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z34 z36 zyz1];
 
 %x=[creHr creHrv creAp mainGen mainAge zyz1];
 %x=[creHr creHrv creAp mainGen mainAge z27 z28 z29 z30 zyz1];
@@ -909,3 +922,7 @@ xval=comparisonTests(xd2,xl2,subs,pvalue,fs);
 xval=comparisonTests(xd3,xl3,subs,pvalue,fs);
 [scores3,x3acc,x3f1,x3phi,x3itr]=unwrapStruct(xval);
 
+
+%% load new data
+
+table1 = readtable('volume_rh.csv');
