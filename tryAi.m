@@ -491,12 +491,12 @@ mainData=x;
 % zoutf1=[z_f1 z_f12 z_f13 z_f14 mean_f1 mean_f12 mean_f13 mean_f14]
 % zoutacc=[z_accuracy1 z_accuracy2 z_accuracy3 z_accuracy4 mean_accuracy1 mean_accuracy2 mean_accuracy3 mean_accuracy4];
 
-xval=comparisonTests(data1,labels1,subs,pvalue,fs);
-[dscores,dacc,df1,dphi,ditr]=unwrapStruct(xval);
-[u1,~,~,~]=feature_selection_adenz(data1{1}',labels1{1},data1{1}',pvalue);
-[u2,~,~,~]=feature_selection_adenz(data2{1}',labels2{1},data2{1}',pvalue);
-[u3,~,~,~]=feature_selection_adenz(data3{1}',labels3{1},data3{1}',pvalue);
-[u4,~,~,~]=feature_selection_adenz(data4{1}',labels4{1},data4{1}',pvalue);
+% xval=comparisonTests(data1,labels1,subs,pvalue,fs);
+% [dscores,dacc,df1,dphi,ditr]=unwrapStruct(xval);
+% [u1,~,~,~]=feature_selection_adenz(data1{1}',labels1{1},data1{1}',pvalue);
+% [u2,~,~,~]=feature_selection_adenz(data2{1}',labels2{1},data2{1}',pvalue);
+% [u3,~,~,~]=feature_selection_adenz(data3{1}',labels3{1},data3{1}',pvalue);
+% [u4,~,~,~]=feature_selection_adenz(data4{1}',labels4{1},data4{1}',pvalue);
 
 
 %z4, z6, z7
@@ -880,23 +880,107 @@ cellNR=table2cell(tableNpuRoi);
 matCell=cell2mat(cellNR(:,2:end));
 
 % compile
+%x=[creHr creHrv creAp mainGen mainAge z2 z3 z8 z9 z10 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z36 tryAlcA tryAlcB tryFodA tryFodB tryDifCon matVolR matVolL matThiR matThiL matMeanCurveR matMeanCurveL matSubCort matCell zyz1];
 x=[creHr creHrv creAp mainGen mainAge z2 z3 z8 z9 z10 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z36 tryAlcA tryAlcB tryFodA tryFodB tryDifCon matVolR matVolL matThiR matThiL matMeanCurveR matMeanCurveL matSubCort zyz1];
 x=prototype_cleanup(x);
-xZT=zscore(x);
+
 
 % physio onliny
+%xp=[creHr creHrv creAp z27 z28 z29 z30 tryAlcA tryAlcB tryFodA tryFodB tryDifCon matVolR matVolL matThiR matThiL matMeanCurveR matMeanCurveL matSubCort matCell zyz1];
+xp0=[creHr creHrv creAp z27 z28 z29 z30 tryAlcA tryAlcB tryFodA tryFodB tryDifCon matVolR matVolL matThiR matThiL matMeanCurveR matMeanCurveL matSubCort];
+
+%xp0=[creHr creHrv creAp z27 z28 z29 z30 tryAlcA tryAlcB tryFodA tryFodB tryDifCon];
+
+
 xp=[creHr creHrv creAp z27 z28 z29 z30 tryAlcA tryAlcB tryFodA tryFodB tryDifCon matVolR matVolL matThiR matThiL matMeanCurveR matMeanCurveL matSubCort zyz1];
 xp=prototype_cleanup(xp);
+
+
+% extraneous
+
+
+%nix 82=TRY 104
+extra=82;
+z4(extra)=[];
+zz1(extra)=[];
+abc(extra)=[];
+mz2(extra)=[];
+suds1(extra)=[];
+
+x(extra,:)=[];
+xp(extra,:)=[];
+% xZT(extra,:)=[];
+% xpZT(extra,:)=[];
+
+x=[x matCell];
+xp=[xp matCell];
+
+xZT=zscore(x);
 xpZT=zscore(xp);
 
 % write
-% csvwrite('tryMriData.csv', prototype_cleanup(x));
-% csvwrite('tryMriPhysData.csv', prototype_cleanup(xp));
-% csvwrite('tryZTData.csv', prototype_cleanup(xZT));
-% csvwrite('tryPhysZData.csv', prototype_cleanup(xpZT));
-% csvwrite('tryPhaiLabels10.csv', prototype_cleanup(z4));
-% csvwrite('tryPhaiLabels20.csv', prototype_cleanup(zz1));
-% csvwrite('tryPhaiLabels30.csv', prototype_cleanup(abc));
-% csvwrite('tryAiLabelsAD.csv', prototype_cleanup(mz2));
-% csvwrite('trySudLabels.csv', prototype_cleanup(suds1));
+% csvwrite('tryMriData.csv', prototype_cleanup(x)); % all data
+% csvwrite('tryMriPhysData.csv', prototype_cleanup(xp)); % zscore all data
+% csvwrite('tryZTData.csv', prototype_cleanup(xZT)); % Phys Only
+% csvwrite('tryPhysZData.csv', prototype_cleanup(xpZT)); %zscore Phys Only
+% csvwrite('tryPhaiLabels10.csv', prototype_cleanup(z4)); % trauma
+% csvwrite('tryPhaiLabels20.csv', prototype_cleanup(zz1)); % ptsd
+% csvwrite('tryPhaiLabels30.csv', prototype_cleanup(abc)); % trauma AND PTSD 
+% csvwrite('tryAiLabelsAD.csv', prototype_cleanup(mz2)); % Anxiety
+% csvwrite('trySudLabels.csv', prototype_cleanup(suds1)); % SUD/AUD
+% 
+% 
+
+%% top feature
+
+% ptsd/trauma
+%-all no z
+[pts1,~,~,~]=feature_selection_adenz(x,zz1,x,pvalue);
+[pts2,~,~,~]=feature_selection_aden(x,zz1,x,pvalue);
+
+%-all z
+[pts3,~,~,~]=feature_selection_adenz(xZT,zz1,xZT,pvalue);
+[pts4,~,~,~]=feature_selection_aden(xZT,zz1,xZT,pvalue);
+
+%-phys no z
+[pts5,~,~,~]=feature_selection_adenz(xp,zz1,xp,pvalue);
+[pts6,~,~,~]=feature_selection_aden(xp,zz1,xp,pvalue);
+
+%-phys z
+[pts7,~,~,~]=feature_selection_adenz(xpZT,zz1,xpZT,pvalue);
+[pts8,~,~,~]=feature_selection_aden(xpZT,zz1,xpZT,pvalue);
+
+% anxiety
+%-all no z
+[gan1,~,~,~]=feature_selection_adenz(x,mz2,x,pvalue);
+[gan2,~,~,~]=feature_selection_aden(x,mz2,x,pvalue);
+
+%-all z
+[gan3,~,~,~]=feature_selection_adenz(xZT,mz2,xZT,pvalue);
+[gan4,~,~,~]=feature_selection_aden(xZT,mz2,xZT,pvalue);
+
+%-phys no z
+[gan5,~,~,~]=feature_selection_adenz(xp,mz2,xp,pvalue);
+[gan6,~,~,~]=feature_selection_aden(xp,mz2,xp,pvalue);
+
+%-phys z
+[gan7,~,~,~]=feature_selection_adenz(xpZT,mz2,xpZT,pvalue);
+[gan8,~,~,~]=feature_selection_aden(xpZT,mz2,xpZT,pvalue);
+
+% sud/aud
+%-all no z
+[aud1,~,~,~]=feature_selection_adenz(x,suds1,x,pvalue);
+[aud2,~,~,~]=feature_selection_aden(x,suds1,x,pvalue);
+
+%-all z
+[aud3,~,~,~]=feature_selection_adenz(xZT,suds1,xZT,pvalue);
+[aud4,~,~,~]=feature_selection_aden(xZT,suds1,xZT,pvalue);
+
+%-phys no z
+[aud5,~,~,~]=feature_selection_adenz(xp,suds1,xp,pvalue);
+[aud6,~,~,~]=feature_selection_aden(xp,suds1,xp,pvalue);
+
+%-phys z
+[aud7,~,~,~]=feature_selection_adenz(xpZT,suds1,xpZT,pvalue);
+[aud8,~,~,~]=feature_selection_aden(xpZT,suds1,xpZT,pvalue);
 
