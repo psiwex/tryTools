@@ -51,33 +51,8 @@ table1 = readtable('volume_rh.csv');
 nameList0=table2cell(table1(:,1));
 [mainIndex,mainDex]=tableIndexer(subNames,nameList0);
 nameList=nameList(mainIndex);
-
-
 leng=length(ageList);
-%[mainIndex,mainDex]=tableIndexer(subNames,nameList);
 
-% subInd=1;
-% mainDex={};
-% mainIndex=[];
-% 
-% for ki=1:length(subNames)
-% subNum=subNames{ki};
-% 
-% 
-% if any(strcmp(nameList,subNum))
-% % Do Something
-% mainDex{subInd}=subNum;
-% 
-% mainIndex(ki)=find(strcmp(nameList,subNum));
-% subInd=subInd+1;
-% 
-% else
-% % Do Something else
-% 
-% end
-% 
-% end
-% 
 
 % vector for gender, age, exp/control group
 mainGen=cell2mat(genderList);
@@ -114,8 +89,6 @@ cueHrvTime=tryBatch{33};
 cueHrvStdTime=tryBatch{34};
 
 hrv=[cueHrvTime(:,1); cueHrvTime(:,2)];
-
-%x=[cueHrvTime(:,1) apValues1(:,1) mainGen mainAge mainGroup];
 
 hrvRest=restHrvMeanTime(:,1);
 xisn=isnan(hrvRest);
@@ -212,30 +185,6 @@ col12=cleanZero(cell2mat(col12));
 mainIndex2=mainIndex;
 mainDex2=mainDex;
 
-% nameList=table2cell(T2(:,1));
-% nameList=subNames;
-% subInd=1;
-% mainDex2={};
-% mainIndex2=[];
-% 
-% for ki=1:length(subNames)
-% subNum=subNames{ki};
-% 
-% 
-% if any(strcmp(nameList,subNum))
-% % Do Something
-% mainDex2{subInd}=subNum;
-% 
-% mainIndex2(ki)=find(strcmp(nameList,subNum));
-% subInd=subInd+1;
-% 
-% else
-% % Do Something else
-% 
-% end
-% 
-% end
-% [mainIndex2,mainDex2]=tableIndexer(subNames,nameList);
 %hrvRest1=hrvRest(mainIndex2);
 % call index
 mainAge=mage2(mainIndex2);
@@ -323,45 +272,7 @@ gLabels2=groupLabels2(mainIndex2);
 gLabels3=groupLabels3(mainIndex2);
 gLabels4=groupLabels4(mainIndex2);
 
-
-
-% 
-% [data1,labels1]=tryFormat(mainData,gLabels1);
-% [data2,labels2]=tryFormat(mainData,gLabels2);
-% [data3,labels3]=tryFormat(mainData,gLabels3);
-% [data4,labels4]=tryFormat(mainData,gLabels4);
-% 
-% [data1,labels1]=classBalance(data1,labels1,subs);
-% [data2,labels2]=classBalance(data2,labels2,subs);
-% [data3,labels3]=classBalance(data3,labels3,subs);
-% [data4,labels4]=classBalance(data4,labels4,subs);
-
 subs=2;
-% [z_measures1,z_phi1,z_phiclassic1,z_aucroc1,z_accuracy1,z_sensitivity1,z_specificity1,z_acc21,z_ppv1,z_npv1,z_f1]=lda_adenz_mval(subs,data1,labels1,pvalue);
-% [z_measures2,z_phi2,z_phiclassic2,z_aucroc2,z_accuracy2,z_sensitivity2,z_specificity2,z_acc22,z_ppv2,z_npv2,z_f12]=lda_adenz_mval(subs,data2,labels2,pvalue);
-% [z_measures3,z_phi3,z_phiclassic3,z_aucroc3,z_accuracy3,z_sensitivity3,z_specificity3,z_acc23,z_ppv3,z_npv3,z_f13]=lda_adenz_mval(subs,data3,labels3,pvalue);
-% [z_measures4,z_phi4,z_phiclassic4,z_aucroc4,z_accuracy4,z_sensitivity4,z_specificity4,z_acc24,z_ppv4,z_npv4,z_f14]=lda_adenz_mval(subs,data4,labels4,pvalue);
-% 
-% [mean_measures1,mean_phi1,mean_phiclassic1,mean_aucroc1,mean_accuracy1,mean_sensitivity1,mean_specificity1,mean_acc21,mean_ppv1,mean_npv1,mean_f1]=lda_aden_mval(subs,data1,labels1,pvalue);
-% [mean_measures2,mean_phi2,mean_phiclassic2,mean_aucroc2,mean_accuracy2,mean_sensitivity2,mean_specificity2,mean_acc22,mean_ppv2,mean_npv2,mean_f12]=lda_aden_mval(subs,data2,labels2,pvalue);
-% [mean_measures3,mean_phi3,mean_phiclassic3,mean_aucroc3,mean_accuracy3,mean_sensitivity3,mean_specificity3,mean_acc23,mean_ppv3,mean_npv3,mean_f13]=lda_aden_mval(subs,data3,labels3,pvalue);
-
-% outs=[z_phi1 z_phi2 z_phi3 z_phi4 mean_phi1 mean_phi2 mean_phi3 0];
-% outacc=[z_accuracy1 z_accuracy2 z_accuracy3 z_accuracy4 mean_accuracy1 mean_accuracy2 mean_accuracy3 0];
-% outf1=[z_f1 z_f12 z_f13 z_f14 mean_f1 mean_f12 mean_f13 0]
-% try
-%[mean_measures4,mean_phi4,mean_phiclassic4,mean_aucroc4,mean_accuracy4,mean_sensitivity4,mean_specificity4,mean_acc24,mean_ppv4,mean_npv4,mean_f14]=lda_aden_mval(subs,data4,labels4,pvalue);
-% 
-% outs=[z_phi1 z_phi2 z_phi3 z_phi4 mean_phi1 mean_phi2 mean_phi3 mean_phi4];
-% outf1=[z_f1 z_f12 z_f13 z_f14 mean_f1 mean_f12 mean_f13 mean_f14]
-% outacc=[z_accuracy1 z_accuracy2 z_accuracy3 z_accuracy4 mean_accuracy1 mean_accuracy2 mean_accuracy3 mean_accuracy4];
-% 
-% xval=comparisonTests(data1,labels1,subs,pvalue,fs);
-% [scores,acc,f1,phi,itr]=unwrapStruct(xval);
-% [q1,~,~,~]=feature_selection_adenz(data1{1}',labels1{1},data1{1}',pvalue);
-% [q2,~,~,~]=feature_selection_adenz(data2{1}',labels2{1},data2{1}',pvalue);
-% [q3,~,~,~]=feature_selection_adenz(data3{1}',labels3{1},data3{1}',pvalue);
-% [q4,~,~,~]=feature_selection_adenz(data4{1}',labels4{1},data4{1}',pvalue);
 
 
 %% loading megalith project
@@ -541,27 +452,27 @@ x=[creHr creHrv creAp mainGen mainAge z2 z3 z8 z9 z10 z12 z13 z14 z15 z16 z17 z1
 % top predictors outside ACES: fam_conflict, fam_management, fam_proreward
 mainData=x;
 
-[data1,labels1]=tryFormat(mainData,z4);
-[data2,labels2]=tryFormat(mainData,z5);
-[data3,labels3]=tryFormat(mainData,z6);
-[data4,labels4]=tryFormat(mainData,z7);
-[data5,labels5]=tryFormat(mainData,suds1);
-
-[data1,labels1]=classBalance(data1,labels1,subs);
-[data2,labels2]=classBalance(data2,labels2,subs);
-[data3,labels3]=classBalance(data3,labels3,subs);
-[data4,labels4]=classBalance(data4,labels4,subs);
-[data5,labels5]=classBalance(data5,labels5,subs);
-
-[z_measures1,z_phi1,z_phiclassic1,z_aucroc1,z_accuracy1,z_sensitivity1,z_specificity1,z_acc21,z_ppv1,z_npv1,z_f1]=lda_adenz_mval(subs,data1,labels1,pvalue);
-[z_measures2,z_phi2,z_phiclassic2,z_aucroc2,z_accuracy2,z_sensitivity2,z_specificity2,z_acc22,z_ppv2,z_npv2,z_f12]=lda_adenz_mval(subs,data2,labels2,pvalue);
-[z_measures3,z_phi3,z_phiclassic3,z_aucroc3,z_accuracy3,z_sensitivity3,z_specificity3,z_acc23,z_ppv3,z_npv3,z_f13]=lda_adenz_mval(subs,data3,labels3,pvalue);
-[z_measures4,z_phi4,z_phiclassic4,z_aucroc4,z_accuracy4,z_sensitivity4,z_specificity4,z_acc24,z_ppv4,z_npv4,z_f14]=lda_adenz_mval(subs,data4,labels4,pvalue);
-[z_measures5,z_phi5,z_phiclassic5,z_aucroc5,z_accuracy5,z_sensitivity5,z_specificity5,z_acc25,z_ppv5,z_npv5,z_f15]=lda_adenz_mval(subs,data5,labels5,pvalue);
-
-[mean_measures1,mean_phi1,mean_phiclassic1,mean_aucroc1,mean_accuracy1,mean_sensitivity1,mean_specificity1,mean_acc21,mean_ppv1,mean_npv1,mean_f1]=lda_aden_mval(subs,data1,labels1,pvalue);
-[mean_measures2,mean_phi2,mean_phiclassic2,mean_aucroc2,mean_accuracy2,mean_sensitivity2,mean_specificity2,mean_acc22,mean_ppv2,mean_npv2,mean_f12]=lda_aden_mval(subs,data2,labels2,pvalue);
-[mean_measures3,mean_phi3,mean_phiclassic3,mean_aucroc3,mean_accuracy3,mean_sensitivity3,mean_specificity3,mean_acc23,mean_ppv3,mean_npv3,mean_f13]=lda_aden_mval(subs,data3,labels3,pvalue);
+% [data1,labels1]=tryFormat(mainData,z4);
+% [data2,labels2]=tryFormat(mainData,z5);
+% [data3,labels3]=tryFormat(mainData,z6);
+% [data4,labels4]=tryFormat(mainData,z7);
+% [data5,labels5]=tryFormat(mainData,suds1);
+% 
+% [data1,labels1]=classBalance(data1,labels1,subs);
+% [data2,labels2]=classBalance(data2,labels2,subs);
+% [data3,labels3]=classBalance(data3,labels3,subs);
+% [data4,labels4]=classBalance(data4,labels4,subs);
+% [data5,labels5]=classBalance(data5,labels5,subs);
+% 
+% [z_measures1,z_phi1,z_phiclassic1,z_aucroc1,z_accuracy1,z_sensitivity1,z_specificity1,z_acc21,z_ppv1,z_npv1,z_f1]=lda_adenz_mval(subs,data1,labels1,pvalue);
+% [z_measures2,z_phi2,z_phiclassic2,z_aucroc2,z_accuracy2,z_sensitivity2,z_specificity2,z_acc22,z_ppv2,z_npv2,z_f12]=lda_adenz_mval(subs,data2,labels2,pvalue);
+% [z_measures3,z_phi3,z_phiclassic3,z_aucroc3,z_accuracy3,z_sensitivity3,z_specificity3,z_acc23,z_ppv3,z_npv3,z_f13]=lda_adenz_mval(subs,data3,labels3,pvalue);
+% [z_measures4,z_phi4,z_phiclassic4,z_aucroc4,z_accuracy4,z_sensitivity4,z_specificity4,z_acc24,z_ppv4,z_npv4,z_f14]=lda_adenz_mval(subs,data4,labels4,pvalue);
+% [z_measures5,z_phi5,z_phiclassic5,z_aucroc5,z_accuracy5,z_sensitivity5,z_specificity5,z_acc25,z_ppv5,z_npv5,z_f15]=lda_adenz_mval(subs,data5,labels5,pvalue);
+% 
+% [mean_measures1,mean_phi1,mean_phiclassic1,mean_aucroc1,mean_accuracy1,mean_sensitivity1,mean_specificity1,mean_acc21,mean_ppv1,mean_npv1,mean_f1]=lda_aden_mval(subs,data1,labels1,pvalue);
+% [mean_measures2,mean_phi2,mean_phiclassic2,mean_aucroc2,mean_accuracy2,mean_sensitivity2,mean_specificity2,mean_acc22,mean_ppv2,mean_npv2,mean_f12]=lda_aden_mval(subs,data2,labels2,pvalue);
+% [mean_measures3,mean_phi3,mean_phiclassic3,mean_aucroc3,mean_accuracy3,mean_sensitivity3,mean_specificity3,mean_acc23,mean_ppv3,mean_npv3,mean_f13]=lda_aden_mval(subs,data3,labels3,pvalue);
 
 % 20, 12, 16, 158
 % 69, 111, 51, 123
@@ -572,13 +483,13 @@ mainData=x;
 % outacc=[z_accuracy1 z_accuracy2 z_accuracy3 z_accuracy4 mean_accuracy1 mean_accuracy2 mean_accuracy3 0];
 % outf1=[z_f1 z_f12 z_f13 z_f14 mean_f1 mean_f12 mean_f13 0]
 % try
-[mean_measures4,mean_phi4,mean_phiclassic4,mean_aucroc4,mean_accuracy4,mean_sensitivity4,mean_specificity4,mean_acc24,mean_ppv4,mean_npv4,mean_f14]=lda_aden_mval(subs,data4,labels4,pvalue);
-[mean_measures5,mean_phi5,mean_phiclassic5,mean_aucroc5,mean_accuracy5,mean_sensitivity5,mean_specificity5,mean_acc25,mean_ppv5,mean_npv5,mean_f15]=lda_aden_mval(subs,data5,labels5,pvalue);
-
-
-zouts=[z_phi1 z_phi2 z_phi3 z_phi4 mean_phi1 mean_phi2 mean_phi3 mean_phi4];
-zoutf1=[z_f1 z_f12 z_f13 z_f14 mean_f1 mean_f12 mean_f13 mean_f14]
-zoutacc=[z_accuracy1 z_accuracy2 z_accuracy3 z_accuracy4 mean_accuracy1 mean_accuracy2 mean_accuracy3 mean_accuracy4];
+% [mean_measures4,mean_phi4,mean_phiclassic4,mean_aucroc4,mean_accuracy4,mean_sensitivity4,mean_specificity4,mean_acc24,mean_ppv4,mean_npv4,mean_f14]=lda_aden_mval(subs,data4,labels4,pvalue);
+% [mean_measures5,mean_phi5,mean_phiclassic5,mean_aucroc5,mean_accuracy5,mean_sensitivity5,mean_specificity5,mean_acc25,mean_ppv5,mean_npv5,mean_f15]=lda_aden_mval(subs,data5,labels5,pvalue);
+% 
+% 
+% zouts=[z_phi1 z_phi2 z_phi3 z_phi4 mean_phi1 mean_phi2 mean_phi3 mean_phi4];
+% zoutf1=[z_f1 z_f12 z_f13 z_f14 mean_f1 mean_f12 mean_f13 mean_f14]
+% zoutacc=[z_accuracy1 z_accuracy2 z_accuracy3 z_accuracy4 mean_accuracy1 mean_accuracy2 mean_accuracy3 mean_accuracy4];
 
 xval=comparisonTests(data1,labels1,subs,pvalue,fs);
 [dscores,dacc,df1,dphi,ditr]=unwrapStruct(xval);
@@ -887,6 +798,7 @@ x=[creHr creHrv creAp mainGen mainAge z2 z3 z8 z9 z10 z11 z12 z13 z14 z15 z16 z1
 
 x=[creHr creHrv creAp mainGen mainAge z2 z3 z8 z9 z10 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z36 tryAlcA tryAlcB tryFodA tryFodB tryDifCon zyz1];
 
+x=[creHr creHrv creAp mainGen mainAge z2 z3 z8 z9 z10 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z36 tryAlcA tryAlcB tryFodA tryFodB tryDifCon];
 
 %x=[creHr creHrv creAp mainGen mainAge 
 % z2 z3 z8 z9 z10 
@@ -924,5 +836,67 @@ xval=comparisonTests(xd3,xl3,subs,pvalue,fs);
 
 
 %% load new data
+% load raw
+tableVolR = readtable('volume_rh.csv');
+tableVolL = readtable('volume_lh.csv');
+tableThiR = readtable('thickness_rh.csv');
+tableThiL = readtable('thickness_lh.csv');
+tableMeanCurveR = readtable('meancurv_rh.csv');
+tableMeanCurveL = readtable('meancurv_lh.csv');
+tableSubCort = readtable('subcortical_volume.csv');
 
-table1 = readtable('volume_rh.csv');
+% convert
+cellVolR=table2cell(tableVolR(:,:));
+cellVolL=table2cell(tableVolL(:,:));
+cellThiR=table2cell(tableThiR(:,:));
+cellThiL=table2cell(tableThiL(:,:));
+cellMeanCurveR=table2cell(tableMeanCurveR(:,:));
+cellMeanCurveL=table2cell(tableMeanCurveL(:,:));
+cellSubCort=table2cell(tableSubCort(:,:));
+
+% mat from cell
+matVolR=cell2mat(cellVolR(:,2:end));
+matVolR=prototype_cleanup(matVolR);
+matVolL=cell2mat(cellVolL(:,2:end));
+matVolL=prototype_cleanup(matVolL);
+matThiR=cell2mat(cellThiR(:,2:end));
+matThiR=prototype_cleanup(matThiR);
+matThiL=cell2mat(cellThiL(:,2:end));
+matThiL=prototype_cleanup(matThiL);
+matMeanCurveR=cell2mat(cellMeanCurveR(:,2:end));
+matMeanCurveR=prototype_cleanup(matMeanCurveR);
+matMeanCurveL=cell2mat(cellMeanCurveL(:,2:end));
+matMeanCurveL=prototype_cleanup(matMeanCurveL);
+matSubCort=cell2mat(cellSubCort(:,2:end));
+matSubCort=prototype_cleanup(matSubCort);
+
+% other
+tableNpuRoi = readtable('npuRoi.xlsx');
+
+nameListNR=table2cell(tableNpuRoi(:,1));
+[mainIndex,mainDex]=tableIndexer(subNames,nameListNR);
+
+cellNR=table2cell(tableNpuRoi);
+matCell=cell2mat(cellNR(:,2:end));
+
+% compile
+x=[creHr creHrv creAp mainGen mainAge z2 z3 z8 z9 z10 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z36 tryAlcA tryAlcB tryFodA tryFodB tryDifCon matVolR matVolL matThiR matThiL matMeanCurveR matMeanCurveL matSubCort zyz1];
+x=prototype_cleanup(x);
+xZT=zscore(x);
+
+% physio onliny
+xp=[creHr creHrv creAp z27 z28 z29 z30 tryAlcA tryAlcB tryFodA tryFodB tryDifCon matVolR matVolL matThiR matThiL matMeanCurveR matMeanCurveL matSubCort zyz1];
+xp=prototype_cleanup(xp);
+xpZT=zscore(xp);
+
+% write
+% csvwrite('tryMriData.csv', prototype_cleanup(x));
+% csvwrite('tryMriPhysData.csv', prototype_cleanup(xp));
+% csvwrite('tryZTData.csv', prototype_cleanup(xZT));
+% csvwrite('tryPhysZData.csv', prototype_cleanup(xpZT));
+% csvwrite('tryPhaiLabels10.csv', prototype_cleanup(z4));
+% csvwrite('tryPhaiLabels20.csv', prototype_cleanup(zz1));
+% csvwrite('tryPhaiLabels30.csv', prototype_cleanup(abc));
+% csvwrite('tryAiLabelsAD.csv', prototype_cleanup(mz2));
+% csvwrite('trySudLabels.csv', prototype_cleanup(suds1));
+
