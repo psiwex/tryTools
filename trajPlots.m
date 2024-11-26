@@ -1,5 +1,8 @@
-load('varTry.mat')
+close all;
+clear; clc;
 
+load('varTry.mat')
+newPnts=20;
 x=varTry';
 
 % figure;
@@ -28,14 +31,20 @@ cellBinge=cell2mat(drinkBingge(:,2:end));
 cellWave=prototype_cleanup(cellWave);
 cellBinge=prototype_cleanup(cellBinge);
 
-endWave=downsample(cellWave',2);
-endBinge=downsample(cellBinge',4);
+%endWave=downsample(cellWave',2);
+%endBinge=downsample(cellBinge',4);
+
+endWave=resample(cellWave',1,2);
+endBinge=resample(cellBinge',1,4);
 
 endWave=round(endWave);
 endBinge=round(endBinge);
 
 [taxWave]=trajectoryTax(endWave);
 [taxBinge]=trajectoryTax(endBinge);
+
+[probClassWave]=probCombiner(taxWave);
+[probClassBinge]=probCombiner(taxBinge);
 
 thresPer=.15;
 [elWave]=elasticNet(taxWave,thresPer);
@@ -44,9 +53,21 @@ thresPer=.15;
 [outWave]=trajAverager(elWave,endWave);
 [outBinge]=trajAverager(elBinge,endBinge);
 
-scaledWave=outWave./max(outWave);
-scaledBinge=outBinge./max(outBinge);
+sampWave=outWave./max(outWave);
+sampBinge=outBinge./max(outBinge);
 
+numClasses=5;
+[probWave,~]=lcaCalc(endWave,numClasses);
+[probBinge,~]=lcaCalc(endBinge,numClasses);
+
+% scaledWave=upsample(sampWave,newPnts);
+% scaledBinge=upsample(sampBinge,newPnts);
+
+scaledWave = resample(sampWave,newPnts,1);
+scaledBinge = resample(sampBinge,newPnts,1);
+
+labWave=unique(elWave);
+labBinge=unique(elBinge);
 
 % figure;
 % hist(taxWave,unique(taxWave))
@@ -75,9 +96,12 @@ title('Scaled Binge Trajectory Types')
 figure;
 plot(scaledWave)
 title('Scaled Wave Trajectory Archetypes')
-%legend('1','2','3')
+legend(num2str(labWave(1)),num2str(labWave(2)),num2str(labWave(3)))
+
 figure;
 plot(scaledBinge)
 title('Scaled Binge Trajectory Archetypes')
+legend(num2str(labWave(1)),num2str(labWave(2)),num2str(labWave(3)))
+
 %legend('2','3')
 

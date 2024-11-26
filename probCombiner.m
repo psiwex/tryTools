@@ -1,22 +1,19 @@
-function [outMat]=trajAverager(workHorse,dataWork)
+function [classAves]=probCombiner(workHorse)
 
 %--------------------------------------------------------------------------
- % trajAverager
+ % probCombiner
 
  % Last updated: December 2024, J. LaRocco
 
- % Details: Average trajectories for each trajectory. 
+ % Details: Average probabilities for each trajectory. 
  
  % Usage:
  % [outMat,classAves]=trajAverager(workHorse,dataWork)
  
  % Input: 
- %  dataWork: Input data matrix of size 3 by N. 
- %           The first data point is first timepoint, and last is final.   
  %  workHorse: Input data array of size N, detailing class labels. 
 
  % Output: 
- %  outMat: Output matrix of size 3 by length N, averaging the class trajectories.    
  %  classAves: Array for probability of each class of length N.
 % Codes: 1-Praire (flat), 2-valley (midtime dip), 3-mountain (midtime rise),
 % 4-ascent (increase), 5-landslide (decline)
@@ -26,16 +23,14 @@ function [outMat]=trajAverager(workHorse,dataWork)
 
 
 
-outMat=[];
+
 xx=unique(workHorse);
-for kk=1:length(xx)
-    targetVal=xx(kk);
-    comboIdx=find(workHorse==targetVal);
-    trajMat=dataWork(:,comboIdx);
-    aveMat=mean(trajMat');
-    outMat(:,kk)=aveMat;
+classAves=zeros(1,length(xx));
+for jk=1:length(xx)
+    classVal=xx(jk);
+    comboLng=find(workHorse==classVal);
+    classPr=length(comboLng)/length(workHorse);
+    classAves(jk)=classPr;
+
 end
-
-
-
 end
