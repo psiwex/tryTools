@@ -984,3 +984,22 @@ xpZT=zscore(xp);
 [aud7,~,~,~]=feature_selection_adenz(xpZT,suds1,xpZT,pvalue);
 [aud8,~,~,~]=feature_selection_aden(xpZT,suds1,xpZT,pvalue);
 
+
+table3 = readtable('class_assignments_drinks_hlme.xlsx');
+
+
+nameListNR1=table2cell(table3(:,1));
+[mainIndex,mainDex1]=tableIndexer(subNames,nameListNR1);
+[mainIndex,mainDex1]=tableIndexer(mainDex,nameListNR1);
+
+nameListNR2=table2cell(table3(:,2));
+
+classDex=cell2mat(nameListNR2);
+classDex2=classDex(mainIndex);
+classDex2=prototype_cleanup(classDex2);
+classDex2=classDex2-1;
+classDex2=prototype_cleanup(classDex2);
+
+%csvwrite('tryTrajLabels.csv', prototype_cleanup(classDex2)); % Trajectories
+
+
