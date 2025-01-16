@@ -895,7 +895,8 @@ xp0=[creHr creHrv creAp z27 z28 z29 z30 tryAlcA tryAlcB tryFodA tryFodB tryDifCo
 xp=[creHr creHrv creAp z27 z28 z29 z30 tryAlcA tryAlcB tryFodA tryFodB tryDifCon matVolR matVolL matThiR matThiL matMeanCurveR matMeanCurveL matSubCort zyz1];
 xp=prototype_cleanup(xp);
 
-
+% mri parts begin after 457. MRI up to 661
+xxr=[ 39 131 169 178 249 263 271 302 305 310 311 325 358 363 365 369 381 382 388 397 415 429 433 437 461 486 491 497 501 551 553 563 582 584 587 603 636 637 638 678];
 % extraneous
 
 
@@ -932,6 +933,16 @@ xpZT=zscore(xp);
 % 
 
 %% top feature
+x=[creHr creHrv creAp mainGen mainAge z2 z3 z8 z9 z10 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z36 tryAlcA tryAlcB tryFodA tryFodB tryDifCon matVolR matVolL matThiR matThiL matMeanCurveR matMeanCurveL matSubCort];
+x1=[tryAlcA tryAlcB tryFodA tryFodB tryDifCon matVolR matVolL matThiR matThiL matMeanCurveR matMeanCurveL matSubCort];
+x=prototype_cleanup(x);
+x1=prototype_cleanup(x1);
+x00=[creHr creHrv creAp mainGen mainAge z2 z3 z8 z9 z10 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z36];
+x00=prototype_cleanup(x00);
+
+x=[ matSubCort];
+x=[ matVolL];
+x=[ matVolR];
 
 % ptsd/trauma
 %-all no z
@@ -1002,4 +1013,67 @@ classDex2=prototype_cleanup(classDex2);
 
 %csvwrite('tryTrajLabels.csv', prototype_cleanup(classDex2)); % Trajectories
 
+[a1,~,~,~]=feature_selection_adenz(zyz1,suds1,zyz1,pvalue);
+[a2,~,~,~]=feature_selection_aden(zyz1,suds1,zyz1,pvalue);
+
+table4 = readtable('TRY_lcmm_drinks_class_4groups.csv');
+nameListLMS=table2cell(table4(:,3));
+
+classLms=table2cell(table4(:,2));
+classLms=cell2mat(classLms);
+classLms=prototype_cleanup(classLms);
+[mainIndex,mainDex1]=tableIndexer(mainDex,nameListLMS);
+
+classLms2=classLms(mainIndex);
+classLms3=classLms2-1;
+%csvwrite('tryQuadLabels.csv', prototype_cleanup(classLms3)); % 4 class archetypes
+
+classL3=find(classLms3==3);
+classL2=find(classLms3==2);
+classL1=find(classLms3==1);
+classL0=find(classLms3==0);
+
+% contrast 0 (non-drinkers) with all
+classLC0X=find(classLms3~=0);
+zlms0=zeros(size(classLms3));
+zlms0(classLC0X)=1;
+
+[alms0a,~,~,~]=feature_selection_adenz(xpZT,zlms0,xpZT,pvalue);
+[alms0b,~,~,~]=feature_selection_aden(xpZT,zlms0,xpZT,pvalue);
+cat0=[alms0a, alms0b];
+cat0=sort(cat0,'ascend');
+% others
+
+classLC1X=find(classLms3~=1);
+zlms1=zeros(size(classLms3));
+zlms1(classLC1X)=1;
+
+
+[alms1a,~,~,~]=feature_selection_adenz(xpZT,zlms1,xpZT,pvalue);
+[alms1b,~,~,~]=feature_selection_aden(xpZT,zlms1,xpZT,pvalue);
+cat1=[alms1a, alms1b];
+cat1=sort(cat1,'ascend');
+
+classLC2X=find(classLms3~=2);
+zlms2=zeros(size(classLms3));
+zlms2(classLC2X)=1;
+
+[alms2a,~,~,~]=feature_selection_adenz(xpZT,zlms0,xpZT,pvalue);
+[alms2b,~,~,~]=feature_selection_aden(xpZT,zlms0,xpZT,pvalue);
+cat2=[alms2a, alms2b];
+cat2=sort(cat2,'ascend');
+
+classLC3X=find(classLms3~=3);
+zlms3=zeros(size(classLms3));
+zlms3(classLC3X)=1;
+[alms3a,~,~,~]=feature_selection_adenz(xpZT,zlms0,xpZT,pvalue);
+[alms3b,~,~,~]=feature_selection_aden(xpZT,zlms0,xpZT,pvalue);
+cat3=[alms3a, alms3b];
+cat3=sort(cat3,'ascend');
+
+% cat0=389, 396
+% cat1=279, 380
+%279: matThiR (284), matMeanCurveL (393), matSubCort (457)
+% cat2=389, 396
+% cat3=389, 396
 
