@@ -884,6 +884,11 @@ matCell=cell2mat(cellNR(:,2:end));
 x=[creHr creHrv creAp mainGen mainAge z2 z3 z8 z9 z10 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z36 tryAlcA tryAlcB tryFodA tryFodB tryDifCon matVolR matVolL matThiR matThiL matMeanCurveR matMeanCurveL matSubCort zyz1];
 x=prototype_cleanup(x);
 
+xsoc=[mainGen mainAge z2 z3 z8 z9 z10 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z31 z32 z33 z34];
+xsoc=prototype_cleanup(xsoc);
+
+xsoc2=[mainGen mainAge z2 z3 z4 z8 z9 z10 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z31 z32 z33 z34];
+xsoc2=prototype_cleanup(xsoc2);
 
 % physio onliny
 %xp=[creHr creHrv creAp z27 z28 z29 z30 tryAlcA tryAlcB tryFodA tryFodB tryDifCon matVolR matVolL matThiR matThiL matMeanCurveR matMeanCurveL matSubCort matCell zyz1];
@@ -893,6 +898,10 @@ xp0=[creHr creHrv creAp z27 z28 z29 z30 tryAlcA tryAlcB tryFodA tryFodB tryDifCo
 
 
 xp=[creHr creHrv creAp z27 z28 z29 z30 tryAlcA tryAlcB tryFodA tryFodB tryDifCon matVolR matVolL matThiR matThiL matMeanCurveR matMeanCurveL matSubCort zyz1];
+
+xp=[matVolR matVolL matThiR matThiL matMeanCurveR matMeanCurveL matSubCort];
+
+
 xp=prototype_cleanup(xp);
 
 % mri parts begin after 457. MRI up to 661
@@ -913,8 +922,8 @@ xp(extra,:)=[];
 % xZT(extra,:)=[];
 % xpZT(extra,:)=[];
 
-x=[x matCell];
-xp=[xp matCell];
+%x=[x matCell];
+%xp=[xp matCell];
 
 xZT=zscore(x);
 xpZT=zscore(xp);
@@ -1076,4 +1085,112 @@ cat3=sort(cat3,'ascend');
 %279: matThiR (284), matMeanCurveL (393), matSubCort (457)
 % cat2=389, 396
 % cat3=389, 396
+xzsoc=zscore(xsoc);
+xzsoc=prototype_cleanup(xzsoc);
+
+xzsoc2=zscore(xsoc2);
+xzsoc2=prototype_cleanup(xzsoc2);
+
+%csvwrite('tryXsoc.csv', prototype_cleanup(xsoc)); % Psychosocial
+%csvwrite('tryXsoc2.csv', prototype_cleanup(xsoc2)); % Psychosocial
+
+%csvwrite('tryXzsoc.csv', prototype_cleanup(xzsoc)); % Psychosocial
+%csvwrite('tryXzsoc2.csv', prototype_cleanup(xzsoc2)); % Psychosocial
+
+%%soc
+
+% group 0
+[alms1a,~,~,~]=feature_selection_adenz(xsoc,zlms0,xsoc,pvalue);
+[alms1b,~,~,~]=feature_selection_aden(xsoc,zlms0,xsoc,pvalue);
+cat1=[alms1a, alms1b];
+x0cat1=sort(cat1,'ascend');
+
+[alms1a,~,~,~]=feature_selection_adenz(xsoc2,zlms0,xsoc2,pvalue);
+[alms1b,~,~,~]=feature_selection_aden(xsoc2,zlms0,xsoc2,pvalue);
+cat1=[alms1a, alms1b];
+x0cat2=sort(cat1,'ascend');
+
+[alms1a,~,~,~]=feature_selection_adenz(xzsoc,zlms0,xzsoc,pvalue);
+[alms1b,~,~,~]=feature_selection_aden(xzsoc,zlms0,xzsoc,pvalue);
+cat1=[alms1a, alms1b];
+x0cat3=sort(cat1,'ascend');
+
+[alms1a,~,~,~]=feature_selection_adenz(xzsoc2,zlms0,xzsoc2,pvalue);
+[alms1b,~,~,~]=feature_selection_aden(xzsoc2,zlms0,xzsoc2,pvalue);
+cat1=[alms1a, alms1b];
+x0cat4=sort(cat1,'ascend');
+
+% x0: 1-[2, 25], 2-[2,26], 3-[2,6], 4-[2,7]
+
+% group 1
+[alms1a,~,~,~]=feature_selection_adenz(xsoc,zlms1,xsoc,pvalue);
+[alms1b,~,~,~]=feature_selection_aden(xsoc,zlms1,xsoc,pvalue);
+cat1=[alms1a, alms1b];
+x1cat1=sort(cat1,'ascend');
+
+[alms1a,~,~,~]=feature_selection_adenz(xsoc2,zlms1,xsoc2,pvalue);
+[alms1b,~,~,~]=feature_selection_aden(xsoc2,zlms1,xsoc2,pvalue);
+cat1=[alms1a, alms1b];
+x1cat2=sort(cat1,'ascend');
+
+[alms1a,~,~,~]=feature_selection_adenz(xzsoc,zlms1,xzsoc,pvalue);
+[alms1b,~,~,~]=feature_selection_aden(xzsoc,zlms1,xzsoc,pvalue);
+cat1=[alms1a, alms1b];
+x1cat3=sort(cat1,'ascend');
+
+[alms1a,~,~,~]=feature_selection_adenz(xzsoc2,zlms1,xzsoc2,pvalue);
+[alms1b,~,~,~]=feature_selection_aden(xzsoc2,zlms1,xzsoc2,pvalue);
+cat1=[alms1a, alms1b];
+x1cat4=sort(cat1,'ascend');
+
+% x1: 1-[8, 15], 2-[9,16], 3-[8,21], 4-[9,22]
+
+% group 2
+[alms1a,~,~,~]=feature_selection_adenz(xsoc,zlms2,xsoc,pvalue);
+[alms1b,~,~,~]=feature_selection_aden(xsoc,zlms2,xsoc,pvalue);
+cat1=[alms1a, alms1b];
+x2cat1=sort(cat1,'ascend');
+
+[alms1a,~,~,~]=feature_selection_adenz(xsoc2,zlms2,xsoc2,pvalue);
+[alms1b,~,~,~]=feature_selection_aden(xsoc2,zlms2,xsoc2,pvalue);
+cat1=[alms1a, alms1b];
+x2cat2=sort(cat1,'ascend');
+
+[alms1a,~,~,~]=feature_selection_adenz(xzsoc,zlms2,xzsoc,pvalue);
+[alms1b,~,~,~]=feature_selection_aden(xzsoc,zlms2,xzsoc,pvalue);
+cat1=[alms1a, alms1b];
+x2cat3=sort(cat1,'ascend');
+
+[alms1a,~,~,~]=feature_selection_adenz(xzsoc2,zlms2,xzsoc2,pvalue);
+[alms1b,~,~,~]=feature_selection_aden(xzsoc2,zlms2,xzsoc2,pvalue);
+cat1=[alms1a, alms1b];
+x2cat4=sort(cat1,'ascend');
+% x3: 1-[25, 25], 2-[26,26], 3-[14,25], 4-[15,26]
+
+% group 4
+[alms1a,~,~,~]=feature_selection_adenz(xsoc,zlms3,xsoc,pvalue);
+[alms1b,~,~,~]=feature_selection_aden(xsoc,zlms3,xsoc,pvalue);
+cat1=[alms1a, alms1b];
+x3cat1=sort(cat1,'ascend');
+
+[alms1a,~,~,~]=feature_selection_adenz(xsoc2,zlms3,xsoc2,pvalue);
+[alms1b,~,~,~]=feature_selection_aden(xsoc2,zlms3,xsoc2,pvalue);
+cat1=[alms1a, alms1b];
+x3cat2=sort(cat1,'ascend');
+
+[alms1a,~,~,~]=feature_selection_adenz(xzsoc,zlms3,xzsoc,pvalue);
+[alms1b,~,~,~]=feature_selection_aden(xzsoc,zlms3,xzsoc,pvalue);
+cat1=[alms1a, alms1b];
+x3cat3=sort(cat1,'ascend');
+
+[alms1a,~,~,~]=feature_selection_adenz(xzsoc2,zlms3,xzsoc2,pvalue);
+[alms1b,~,~,~]=feature_selection_aden(xzsoc2,zlms3,xzsoc2,pvalue);
+cat1=[alms1a, alms1b];
+x3cat4=sort(cat1,'ascend');
+% x4: 1-[25, 25], 2-[26,26], 3-[24,25], 4-[25,26]
+
+% x0: 1-[2, 25], 2-[2,26], 3-[2,6], 4-[2,7]
+% x1: 1-[8, 15], 2-[9,16], 3-[8,21], 4-[9,22]
+% x3: 1-[25, 25], 2-[26,26], 3-[14,25], 4-[15,26]
+% x4: 1-[25, 25], 2-[26,26], 3-[24,25], 4-[25,26]
 
