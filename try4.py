@@ -44,24 +44,27 @@ from numpy import genfromtxt
 
 #X = genfromtxt('tryZTData.csv', delimiter=',')
 #X=stats.zscore(X0)
-X = genfromtxt('tryPhysZData.csv', delimiter=',')
-X = genfromtxt('tryXsoc.csv', delimiter=',')
+#X = genfromtxt('tryPhysZData.csv', delimiter=',')
+X = genfromtxt('tryXfiz.csv', delimiter=',')
+#X = genfromtxt('tryXzfiz.csv', delimiter=',')
+#X = genfromtxt('tryXsoc.csv', delimiter=',')
+#X = genfromtxt('tryXzsoc.csv', delimiter=',')
 
-X = genfromtxt('tryXzsoc.csv', delimiter=',')
-
-X = genfromtxt('tryXsoc2.csv', delimiter=',')
-X = genfromtxt('tryXzsoc2.csv', delimiter=',')
 
 #X=stats.zscore(X)
 
 y1 = genfromtxt('tryPhaiLabels10.csv', delimiter=',')
 y2 = genfromtxt('tryPhaiLabels20.csv', delimiter=',')
 y3 = genfromtxt('tryPhaiLabels30.csv', delimiter=',')
-y6 = genfromtxt('tryQuadLabels.csv', delimiter=',')
+
 y4 = genfromtxt('tryAiLabelsAD.csv', delimiter=',')
 y5 = genfromtxt('trySudLabels.csv', delimiter=',')
 
-
+y6 = genfromtxt('tryQuadLabels.csv', delimiter=',')
+#y6 = genfromtxt('tryLab0.csv', delimiter=',')
+#y6 = genfromtxt('tryLab1.csv', delimiter=',')
+#y6 = genfromtxt('tryLab2.csv', delimiter=',')
+#y6 = genfromtxt('tryLab3.csv', delimiter=',')
 
 #print(np.shape(X))
 #print(np.shape(y1))
@@ -210,104 +213,5 @@ print('RandForest F1')
 print(cb6fsF1)
 print('')
 
-
-
-
-
-
-print('Predicting SUD/AUD')
-
-y=y5
-## compare classifiers
-print('Running classifiers...')
-
-ca1finalAcc,ca1finalF1,cb1fsAcc,cb1fsF1,ca2finalAcc,ca2finalF1,cb2fsAcc,cb2fsF1,ca3finalAcc,ca3finalF1,cb3fsAcc,cb3fsF1,ca4finalAcc,ca4finalF1,cb4fsAcc,cb4fsF1,ca5finalAcc,ca5finalF1,cb5fsAcc,cb5fsF1,ca6finalAcc,ca6finalF1,cb6fsAcc,cb6fsF1=classOutputs(N,X,y5,featureNumber)
-
-print('Megasystem: SUD/AUD')
-print('')
-print('No FS')
-print('LDA Acc')
-print(ca1finalAcc)
-print('LDA F1')
-print(ca1finalF1)
-print('')
-
-
-print('NBayes Acc')
-print(ca2finalAcc)
-print('NBayes F1')
-print(ca2finalF1)
-print('')
-
-
-
-print('SVM Acc')
-print(ca3finalAcc)
-print('SVM F1')
-print(ca3finalF1)
-print('')
-
-
-print('KNN Acc')
-print(ca4finalAcc)
-print('KNN F1')
-print(ca4finalF1)
-print('')
-
-print('LogReg Acc')
-print(ca5finalAcc)
-print('LogReg F1')
-print(ca5finalF1)
-print('')
-
-print('RandForest Acc')
-print(ca6finalAcc)
-print('RandForest F1')
-print(ca6finalF1)
-print('')
-
-print('Megasystem: SUD/AUD')
-print('With FS')
-print('')
-print('LDA Acc')
-print(cb1fsAcc)
-print('LDA F1')
-print(cb1fsF1)
-print('')
-
-
-print('NBayes Acc')
-print(cb2fsAcc)
-print('NBayes F1')
-print(cb2fsF1)
-print('')
-
-
-
-print('SVM Acc')
-print(cb3fsAcc)
-print('SVM F1')
-print(cb3fsF1)
-print('')
-
-
-print('KNN Acc')
-print(cb4fsAcc)
-print('KNN F1')
-print(cb4fsF1)
-print('')
-
-
-print('LogReg Acc')
-print(cb5fsAcc)
-print('LogReg F1')
-print(cb5fsF1)
-print('')
-
-print('RandForest Acc')
-print(cb6fsAcc)
-print('RandForest F1')
-print(cb6fsF1)
-print('')
 
 

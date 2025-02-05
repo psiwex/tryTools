@@ -1,13 +1,15 @@
 %https://www.mathworks.com/help/stats/repeatedmeasuresmodel.ranova.html
-tic;
+%textra=ic;
 % new cats: AUD/SUD. 0: no disorder, 1: AUD/SUD
-
+clear; clc;
 load('sud.mat','sud')
 %new categories
 %-0: no trauma
 %-1: trauma but no PTSD
 %-2: trauma and PTSD (lifetime/current)
 
+%nix 82=TRY 104
+extra=82;
 load('tryRestHr.mat',"tryBatch");
 restMeanTime=tryBatch{1};
 restStdTime=tryBatch{2};
@@ -897,11 +899,13 @@ xsoc=[mainGen mainAge z2 z3 z8 z9 z10 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z2
 %     z15 z16 z17 z18 z19 
 %     z20 z21 z22 z23 z24 
 %     z25 z26 z31 z32 z33 z34];
+xsoc(extra,:)=[];
+
 xsoc=prototype_cleanup(xsoc);
-
-xsoc2=[mainGen mainAge z2 z3 z4 z8 z9 z10 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z31 z32 z33 z34];
+xsoc2=xsoc;
+%xsoc2=[mainGen mainAge z2 z3 z4 z8 z9 z10 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z31 z32 z33 z34];
 xsoc2=prototype_cleanup(xsoc2);
-
+%xsoc2(extra)=[];
 % physio onliny
 %xp=[creHr creHrv creAp z27 z28 z29 z30 tryAlcA tryAlcB tryFodA tryFodB tryDifCon matVolR matVolL matThiR matThiL matMeanCurveR matMeanCurveL matSubCort matCell zyz1];
 xp0=[creHr creHrv creAp z27 z28 z29 z30 tryAlcA tryAlcB tryFodA tryFodB tryDifCon matVolR matVolL matThiR matThiL matMeanCurveR matMeanCurveL matSubCort];
@@ -909,35 +913,37 @@ xp0=[creHr creHrv creAp z27 z28 z29 z30 tryAlcA tryAlcB tryFodA tryFodB tryDifCo
 %xp0=[creHr creHrv creAp z27 z28 z29 z30 tryAlcA tryAlcB tryFodA tryFodB tryDifCon];
 
 
-xp=[creHr creHrv creAp z27 z28 z29 z30 tryAlcA tryAlcB tryFodA tryFodB tryDifCon matVolR matVolL matThiR matThiL matMeanCurveR matMeanCurveL matSubCort zyz1];
+%xp=[creHr creHrv creAp z27 z28 z29 z30 tryAlcA tryAlcB tryFodA tryFodB tryDifCon matVolR matVolL matThiR matThiL matMeanCurveR matMeanCurveL matSubCort zyz1];
 
-xp=[matVolR matVolL matThiR matThiL matMeanCurveR matMeanCurveL matSubCort];
+%xp=[matVolR matVolL matThiR matThiL matMeanCurveR matMeanCurveL matSubCort];
 
 
-xp=prototype_cleanup(xp);
+xp=xp0;
+%x(extra,:)=[];
+xp(extra,:)=[];
+%xp=prototype_cleanup(xp);
 
 % mri parts begin after 457. MRI up to 661
 xxr=[ 39 131 169 178 249 263 271 302 305 310 311 325 358 363 365 369 381 382 388 397 415 429 433 437 461 486 491 497 501 551 553 563 582 584 587 603 636 637 638 678];
 % extraneous
 
 
-%nix 82=TRY 104
-extra=82;
+
 z4(extra)=[];
 zz1(extra)=[];
 abc(extra)=[];
 mz2(extra)=[];
 suds1(extra)=[];
 
-x(extra,:)=[];
-xp(extra,:)=[];
+%x(extra,:)=[];
+%xp(extra,:)=[];
 % xZT(extra,:)=[];
 % xpZT(extra,:)=[];
 
 %x=[x matCell];
 %xp=[xp matCell];
 
-xZT=zscore(x);
+%xZT=zscore(x);
 xpZT=zscore(xp);
 
 % write
@@ -961,9 +967,12 @@ x1=prototype_cleanup(x1);
 x00=[creHr creHrv creAp mainGen mainAge z2 z3 z8 z9 z10 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z36];
 x00=prototype_cleanup(x00);
 
-x=[ matSubCort];
-x=[ matVolL];
-x=[ matVolR];
+x1(extra,:)=[];
+x00(extra,:)=[];
+
+% x=[ matSubCort];
+% x=[ matVolL];
+% x=[ matVolR];
 
 % ptsd/trauma
 %-all no z
@@ -971,8 +980,8 @@ x=[ matVolR];
 [pts2,~,~,~]=feature_selection_aden(x,zz1,x,pvalue);
 
 %-all z
-[pts3,~,~,~]=feature_selection_adenz(xZT,zz1,xZT,pvalue);
-[pts4,~,~,~]=feature_selection_aden(xZT,zz1,xZT,pvalue);
+% [pts3,~,~,~]=feature_selection_adenz(xZT,zz1,xZT,pvalue);
+% [pts4,~,~,~]=feature_selection_aden(xZT,zz1,xZT,pvalue);
 
 %-phys no z
 [pts5,~,~,~]=feature_selection_adenz(xp,zz1,xp,pvalue);
@@ -988,16 +997,16 @@ x=[ matVolR];
 [gan2,~,~,~]=feature_selection_aden(x,mz2,x,pvalue);
 
 %-all z
-[gan3,~,~,~]=feature_selection_adenz(xZT,mz2,xZT,pvalue);
-[gan4,~,~,~]=feature_selection_aden(xZT,mz2,xZT,pvalue);
+% [gan3,~,~,~]=feature_selection_adenz(xZT,mz2,xZT,pvalue);
+% [gan4,~,~,~]=feature_selection_aden(xZT,mz2,xZT,pvalue);
 
 %-phys no z
 [gan5,~,~,~]=feature_selection_adenz(xp,mz2,xp,pvalue);
 [gan6,~,~,~]=feature_selection_aden(xp,mz2,xp,pvalue);
 
 %-phys z
-[gan7,~,~,~]=feature_selection_adenz(xpZT,mz2,xpZT,pvalue);
-[gan8,~,~,~]=feature_selection_aden(xpZT,mz2,xpZT,pvalue);
+% [gan7,~,~,~]=feature_selection_adenz(xpZT,mz2,xpZT,pvalue);
+% [gan8,~,~,~]=feature_selection_aden(xpZT,mz2,xpZT,pvalue);
 
 % sud/aud
 %-all no z
@@ -1005,16 +1014,16 @@ x=[ matVolR];
 [aud2,~,~,~]=feature_selection_aden(x,suds1,x,pvalue);
 
 %-all z
-[aud3,~,~,~]=feature_selection_adenz(xZT,suds1,xZT,pvalue);
-[aud4,~,~,~]=feature_selection_aden(xZT,suds1,xZT,pvalue);
+% [aud3,~,~,~]=feature_selection_adenz(xZT,suds1,xZT,pvalue);
+% [aud4,~,~,~]=feature_selection_aden(xZT,suds1,xZT,pvalue);
 
 %-phys no z
 [aud5,~,~,~]=feature_selection_adenz(xp,suds1,xp,pvalue);
 [aud6,~,~,~]=feature_selection_aden(xp,suds1,xp,pvalue);
 
 %-phys z
-[aud7,~,~,~]=feature_selection_adenz(xpZT,suds1,xpZT,pvalue);
-[aud8,~,~,~]=feature_selection_aden(xpZT,suds1,xpZT,pvalue);
+% [aud7,~,~,~]=feature_selection_adenz(xpZT,suds1,xpZT,pvalue);
+% [aud8,~,~,~]=feature_selection_aden(xpZT,suds1,xpZT,pvalue);
 
 
 table3 = readtable('class_assignments_drinks_hlme.xlsx');
@@ -1106,17 +1115,24 @@ xzsoc=prototype_cleanup(xzsoc);
 xzsoc2=zscore(xsoc2);
 xzsoc2=prototype_cleanup(xzsoc2);
 
-%csvwrite('tryXsoc.csv', prototype_cleanup(xsoc)); % Psychosocial
-%csvwrite('tryXsoc2.csv', prototype_cleanup(xsoc2)); % Psychosocial
+xzp=zscore(xp);
+xzp=prototype_cleanup(xzp);
 
-%csvwrite('tryXzsoc.csv', prototype_cleanup(xzsoc)); % Psychosocial
-%csvwrite('tryXzsoc2.csv', prototype_cleanup(xzsoc2)); % Psychosocial
-
-%csvwrite('tryLab0.csv', prototype_cleanup(zlms0)); 
-csvwrite('tryLab0.csv', prototype_cleanup(zlms0)); 
-csvwrite('tryLab1.csv', prototype_cleanup(zlms1)); 
-csvwrite('tryLab2.csv', prototype_cleanup(zlms2)); 
-csvwrite('tryLab3.csv', prototype_cleanup(zlms3)); 
+% csvwrite('tryXfiz.csv', prototype_cleanup(xp)); % physical
+% csvwrite('tryXzfiz.csv', prototype_cleanup(xzp)); % physical
+% 
+% csvwrite('tryXsoc.csv', prototype_cleanup(xsoc)); % Psychosocial
+% %csvwrite('tryXsoc2.csv', prototype_cleanup(xsoc2)); % Psychosocial
+% 
+% csvwrite('tryXzsoc.csv', prototype_cleanup(xzsoc)); % Psychosocial
+% %csvwrite('tryXzsoc2.csv', prototype_cleanup(xzsoc2)); % Psychosocial
+% 
+% %csvwrite('tryLab0.csv', prototype_cleanup(zlms0)); 
+% csvwrite('tryLab0.csv', prototype_cleanup(zlms0)); 
+% csvwrite('tryLab1.csv', prototype_cleanup(zlms1)); 
+% csvwrite('tryLab2.csv', prototype_cleanup(zlms2)); 
+% csvwrite('tryLab3.csv', prototype_cleanup(zlms3)); 
+% csvwrite('tryQuadLabels.csv', prototype_cleanup(classLms3));
 
 %%soc
 
@@ -1125,100 +1141,214 @@ csvwrite('tryLab3.csv', prototype_cleanup(zlms3));
 [alms1b,~,~,~]=feature_selection_aden(xsoc,zlms0,xsoc,pvalue);
 cat1=[alms1a, alms1b];
 x0cat1=sort(cat1,'ascend');
-
-[alms1a,~,~,~]=feature_selection_adenz(xsoc2,zlms0,xsoc2,pvalue);
-[alms1b,~,~,~]=feature_selection_aden(xsoc2,zlms0,xsoc2,pvalue);
+% 18, 25
+[alms1a,~,~,~]=feature_selection_adenz(xp,zlms0,xp,pvalue);
+[alms1b,~,~,~]=feature_selection_aden(xp,zlms0,xp,pvalue);
 cat1=[alms1a, alms1b];
 x0cat2=sort(cat1,'ascend');
-
+%61   396
 [alms1a,~,~,~]=feature_selection_adenz(xzsoc,zlms0,xzsoc,pvalue);
 [alms1b,~,~,~]=feature_selection_aden(xzsoc,zlms0,xzsoc,pvalue);
 cat1=[alms1a, alms1b];
 x0cat3=sort(cat1,'ascend');
-
-[alms1a,~,~,~]=feature_selection_adenz(xzsoc2,zlms0,xzsoc2,pvalue);
-[alms1b,~,~,~]=feature_selection_aden(xzsoc2,zlms0,xzsoc2,pvalue);
+%7    18
+[alms1a,~,~,~]=feature_selection_adenz(xzp,zlms0,xzp,pvalue);
+[alms1b,~,~,~]=feature_selection_aden(xzp,zlms0,xzp,pvalue);
 cat1=[alms1a, alms1b];
 x0cat4=sort(cat1,'ascend');
-
-% x0: 1-[2, 25], 2-[2,26], 3-[2,6], 4-[2,7]
+%389   396
+% x0: 1-[18, 25], 2-[61   396], 3-[7    18], 4-[389   396]
 
 % group 1
 [alms1a,~,~,~]=feature_selection_adenz(xsoc,zlms1,xsoc,pvalue);
 [alms1b,~,~,~]=feature_selection_aden(xsoc,zlms1,xsoc,pvalue);
 cat1=[alms1a, alms1b];
 x1cat1=sort(cat1,'ascend');
+%8    24
 
-[alms1a,~,~,~]=feature_selection_adenz(xsoc2,zlms1,xsoc2,pvalue);
-[alms1b,~,~,~]=feature_selection_aden(xsoc2,zlms1,xsoc2,pvalue);
+[alms1a,~,~,~]=feature_selection_adenz(xp,zlms1,xp,pvalue);
+[alms1b,~,~,~]=feature_selection_aden(xp,zlms1,xp,pvalue);
 cat1=[alms1a, alms1b];
 x1cat2=sort(cat1,'ascend');
+%169   380
 
 [alms1a,~,~,~]=feature_selection_adenz(xzsoc,zlms1,xzsoc,pvalue);
 [alms1b,~,~,~]=feature_selection_aden(xzsoc,zlms1,xzsoc,pvalue);
 cat1=[alms1a, alms1b];
 x1cat3=sort(cat1,'ascend');
+%8    10
 
-[alms1a,~,~,~]=feature_selection_adenz(xzsoc2,zlms1,xzsoc2,pvalue);
-[alms1b,~,~,~]=feature_selection_aden(xzsoc2,zlms1,xzsoc2,pvalue);
+[alms1a,~,~,~]=feature_selection_adenz(xzp,zlms1,xzp,pvalue);
+[alms1b,~,~,~]=feature_selection_aden(xzp,zlms1,xzp,pvalue);
 cat1=[alms1a, alms1b];
 x1cat4=sort(cat1,'ascend');
+%279   380
 
-% x1: 1-[8, 15], 2-[9,16], 3-[8,21], 4-[9,22]
+% x1: 1-[8    24], 2-[169   380], 3-[8    10], 4-[279   380]
 
 % group 2
 [alms1a,~,~,~]=feature_selection_adenz(xsoc,zlms2,xsoc,pvalue);
 [alms1b,~,~,~]=feature_selection_aden(xsoc,zlms2,xsoc,pvalue);
 cat1=[alms1a, alms1b];
 x2cat1=sort(cat1,'ascend');
+%25    25
 
-[alms1a,~,~,~]=feature_selection_adenz(xsoc2,zlms2,xsoc2,pvalue);
-[alms1b,~,~,~]=feature_selection_aden(xsoc2,zlms2,xsoc2,pvalue);
+[alms1a,~,~,~]=feature_selection_adenz(xp,zlms2,xp,pvalue);
+[alms1b,~,~,~]=feature_selection_aden(xp,zlms2,xp,pvalue);
 cat1=[alms1a, alms1b];
 x2cat2=sort(cat1,'ascend');
+%72   326
 
 [alms1a,~,~,~]=feature_selection_adenz(xzsoc,zlms2,xzsoc,pvalue);
 [alms1b,~,~,~]=feature_selection_aden(xzsoc,zlms2,xzsoc,pvalue);
 cat1=[alms1a, alms1b];
 x2cat3=sort(cat1,'ascend');
+% 19    25
 
-[alms1a,~,~,~]=feature_selection_adenz(xzsoc2,zlms2,xzsoc2,pvalue);
-[alms1b,~,~,~]=feature_selection_aden(xzsoc2,zlms2,xzsoc2,pvalue);
+[alms1a,~,~,~]=feature_selection_adenz(xzp,zlms2,xzp,pvalue);
+[alms1b,~,~,~]=feature_selection_aden(xzp,zlms2,xzp,pvalue);
 cat1=[alms1a, alms1b];
 x2cat4=sort(cat1,'ascend');
-% x3: 1-[25, 25], 2-[26,26], 3-[14,25], 4-[15,26]
+% 291   326
+% x3: 1-[25    25], 2-[72   326], 3-[19    25], 4-[291   326]
 
 % group 4
 [alms1a,~,~,~]=feature_selection_adenz(xsoc,zlms3,xsoc,pvalue);
 [alms1b,~,~,~]=feature_selection_aden(xsoc,zlms3,xsoc,pvalue);
 cat1=[alms1a, alms1b];
 x3cat1=sort(cat1,'ascend');
+% 9    24
 
 %[m_measures0,m_phi0,m_phiclassic0,m_aucroc0,m_accuracy0,m_sensitivity0,m_specificity0,m_acc20,m_ppv0,m_npv0,m_f10]=lda_adenz_mval(subs,d1,l1,pvalue);
 %[m_measures1,m_phi1,m_phiclassic1,m_aucroc1,m_accuracy1,m_sensitivity1,m_specificity1,m_acc21,m_ppv1,m_npv1,m_f11]=lda_aden_mval(subs,d1,l1,pvalue);
 
-[alms1a,~,~,~]=feature_selection_adenz(xsoc2,zlms3,xsoc2,pvalue);
-[alms1b,~,~,~]=feature_selection_aden(xsoc2,zlms3,xsoc2,pvalue);
+[alms1a,~,~,~]=feature_selection_adenz(xp,zlms3,xp,pvalue);
+[alms1b,~,~,~]=feature_selection_aden(xp,zlms3,xp,pvalue);
 cat1=[alms1a, alms1b];
 x3cat2=sort(cat1,'ascend');
+% 73   131
 
 [alms1a,~,~,~]=feature_selection_adenz(xzsoc,zlms3,xzsoc,pvalue);
 [alms1b,~,~,~]=feature_selection_aden(xzsoc,zlms3,xzsoc,pvalue);
 cat1=[alms1a, alms1b];
 x3cat3=sort(cat1,'ascend');
+%9    13
 
-[alms1a,~,~,~]=feature_selection_adenz(xzsoc2,zlms3,xzsoc2,pvalue);
-[alms1b,~,~,~]=feature_selection_aden(xzsoc2,zlms3,xzsoc2,pvalue);
+[alms1a,~,~,~]=feature_selection_adenz(xzp,zlms3,xzp,pvalue);
+[alms1b,~,~,~]=feature_selection_aden(xzp,zlms3,xzp,pvalue);
 cat1=[alms1a, alms1b];
 x3cat4=sort(cat1,'ascend');
-% x4: 1-[25, 25], 2-[26,26], 3-[24,25], 4-[25,26]
+%131   313
+% x4: 1-[9    24], 2-[73   131], 3-[9    13], 4-[131   313]
 
 % x0: 1-[2, 25], 2-[2,26], 3-[2,6], 4-[2,7]
 %2-age, 6-lifetime ptsd, 
 
-% x1: 1-[8, 15], 2-[9,16], 3-[8,21], 4-[9,22]
+% x0: 1-[18, 25], 2-[61   396], 3-[7    18], 4-[389   396]
+% x1: 1-[8    24], 2-[169   380], 3-[8    10], 4-[279   380]
+% x3: 1-[25    25], 2-[72   326], 3-[19    25], 4-[291   326]
+% x4: 1-[9    24], 2-[73   131], 3-[9    13], 4-[131   313]
 
-% x3: 1-[25, 25], 2-[26,26], 3-[14,25], 4-[15,26]
+%soc:
+%7-income, 8-bpa, 9-TEPS-A, 10-TEPS-C, 13-Sub_parent_enviornment, 18-fam_conflict, 19-fam_antisocial, 24-CannabisUse, 25-AlcoholUse
 
-% x4: 1-[25, 25], 2-[26,26], 3-[24,25], 4-[25,26]
+%xp0=[creHr(1) creHrv(2) creAp(3) z27(4) z28(5) 
+% z29(6) z30(7) tryAlcA(8:21) tryAlcB(22:35) tryFodA(36:49) 
+% tryFodB(50:63) tryDifCon(64:175) matVolR(176:211) matVolL(212:247) matThiR(248:284) 
+% matThiL(285:321) matMeanCurveR(322:357) matMeanCurveL(358:393) matSubCort(394:457)];
+
+% xsoc=[mainGen  mainAge z2 z3 z8 
+%     z9 z10 z12 z13 z14 
+%     z15 z16 z17 z18 z19 
+%     z20 z21 z22 z23 z24 
+%     z25 z26 z31 z32 z33 z34];
+
+% 
+% soc:
+% 7-income, 8-bpa, 9-TEPS-A, 10-TEPS-C, 13-Sub_parent_enviornment, 18-fam_conflict, 19-fam_antisocial, 24-CannabisUse, 25-AlcoholUse
+% 
+% fiz:
+% 61-tryFodB, 72-tryDifCon, 73-tryDifCon, 131-tryDifCon, 279-matThiR, 291-matThiL, 313-matThiL, 326-matMeanCurveR, 380-matMeanCurveL, 396-matSubCort
+
+% lifetime trauma: z4
+% AUD: suds1
+
+
+
+[r,p]=corrcoef(xp(:,396),z4);
+[r,p]=corrcoef(xp(:,380),z4);
+[r,p]=corrcoef(xp(:,326),z4);
+[r,p]=corrcoef(xp(:,313),z4);
+[r,p]=corrcoef(xsoc(:,7),z4);
+[r,p]=corrcoef(xsoc(:,8),z4);
+[r,p]=corrcoef(xsoc(:,19),z4);
+[r,p]=corrcoef(xsoc(:,9),z4);
+
+[r,p]=corrcoef(xp(:,396),suds1);
+[r,p]=corrcoef(xp(:,380),suds1);
+[r,p]=corrcoef(xp(:,326),suds1);
+[r,p]=corrcoef(xp(:,313),suds1);
+[r,p]=corrcoef(xsoc(:,7),suds1);
+[r,p]=corrcoef(xsoc(:,8),suds1);
+[r,p]=corrcoef(xsoc(:,19),suds1);
+[r,p]=corrcoef(xsoc(:,9),suds1);
+
+
+
+[mainOuts0,outRow0]=featureScanner(xp,z4);
+[mainOuts1,outRow1]=featureScanner(xp,suds1);
+[mainOuts2,outRow2]=featureScanner(xsoc,z4);
+[mainOuts3,outRow3]=featureScanner(xsoc,suds1);
+
+
+[r0,p0]=corrcoef(xp(:,mainOuts0),z4);
+[r1,p1]=corrcoef(xp(:,mainOuts1),suds1);
+
+[r2,p2]=corrcoef(xsoc(:,mainOuts2),z4);
+[r3,p3]=corrcoef(xsoc(:,mainOuts3),suds1);
+
+%% smaller contrasts
+[sData01,sLabels01]=booleanCat(0,1,xsoc,classLms3);
+[sData02,sLabels02]=booleanCat(0,2,xsoc,classLms3);
+[sData03,sLabels03]=booleanCat(0,3,xsoc,classLms3);
+[sData12,sLabels12]=booleanCat(1,2,xsoc,classLms3);
+[sData13,sLabels13]=booleanCat(1,3,xsoc,classLms3);
+[sData23,sLabels23]=booleanCat(2,3,xsoc,classLms3);
+
+[fData01,fLabels01]=booleanCat(0,1,xp,classLms3);
+[fData02,fLabels02]=booleanCat(0,2,xp,classLms3);
+[fData03,fLabels03]=booleanCat(0,3,xp,classLms3);
+[fData12,fLabels12]=booleanCat(1,2,xp,classLms3);
+[fData13,fLabels13]=booleanCat(1,3,xp,classLms3);
+[fData23,fLabels23]=booleanCat(2,3,xp,classLms3);
+
+%% top features for smaller contrasts
+[sFeatures01]=featureRanks(sData01,sLabels01);
+[sFeatures02]=featureRanks(sData02,sLabels02);
+[sFeatures03]=featureRanks(sData03,sLabels03);
+[sFeatures12]=featureRanks(sData12,sLabels12);
+[sFeatures13]=featureRanks(sData13,sLabels13);
+[sFeatures23]=featureRanks(sData23,sLabels23);
+
+[fFeatures01]=featureRanks(fData01,fLabels01);
+[fFeatures02]=featureRanks(fData02,fLabels02);
+[fFeatures03]=featureRanks(fData03,fLabels03);
+[fFeatures12]=featureRanks(fData12,fLabels12);
+[fFeatures13]=featureRanks(fData13,fLabels13);
+[fFeatures23]=featureRanks(fData23,fLabels23);
+
+%% other scans
+[sOuts01,sRow01]=featureScanner(sData01,sLabels01);
+[sOuts02,sRow02]=featureScanner(sData02,sLabels02);
+[sOuts03,sRow03]=featureScanner(sData03,sLabels03);
+[sOuts12,sRow12]=featureScanner(sData12,sLabels12);
+[sOuts13,sRow13]=featureScanner(sData13,sLabels13);
+[sOuts23,sRow23]=featureScanner(sData23,sLabels23);
+
+[fOuts01,fRow01]=featureScanner(fData01,fLabels01);
+[fOuts02,fRow02]=featureScanner(fData02,fLabels02);
+[fOuts03,fRow03]=featureScanner(fData03,fLabels03);
+[fOuts12,fRow12]=featureScanner(fData12,fLabels12);
+[fOuts13,fRow13]=featureScanner(fData13,fLabels13);
+[fOuts23,fRow23]=featureScanner(fData23,fLabels23);
 
