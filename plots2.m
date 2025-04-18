@@ -100,8 +100,8 @@ err=.5*std(prestim);
 err2=.5*std(pststim);
 
 h=bar(x, [y; y2]);
-set(h(1),'facecolor',[0 1 0])
-set(h(2),'facecolor',[0 0 1])
+set(h(1),'facecolor',[0 .7 0])
+set(h(2),'facecolor',[0 0 .5])
 % hold on;
 %xticklabels({'Left Amygdala',	'Right Amygdala',	'Left Fusiform Face Area',	'Right Fusiform Face Area'});
 %xticklabels({'Left Amygdala',	'Right Amygdala',	'Left Parietal Superior',	'Right Parietal Superior'});
